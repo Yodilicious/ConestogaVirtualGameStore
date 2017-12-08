@@ -9,6 +9,7 @@
         public string ReviewText { get; set; }
         public int Rating { get; set; }
         public DateTime Date { get; set; }
+        public bool IsApproved { get; set; }
 
         public long GameId { get; set; }
         public Game Game { get; set; }

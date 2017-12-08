@@ -11,9 +11,10 @@ using System;
 namespace ConestogaVirtualGameStore.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20171208223255_AddedReviewApproval")]
+    partial class AddedReviewApproval
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -197,30 +198,6 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                     b.ToTable("ShoppingCartItems");
                 });
 
-            modelBuilder.Entity("ConestogaVirtualGameStore.Web.Models.Wishlist", b =>
-                {
-                    b.Property<long>("RecordId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<long?>("GameRecordId");
-
-                    b.Property<string>("ImageFileName")
-                        .IsRequired();
-
-                    b.Property<string>("Price")
-                        .IsRequired();
-                    b.Property<decimal>("Price");
-
-                    b.Property<string>("Title")
-                        .IsRequired();
-
-                    b.HasKey("RecordId");
-
-                    b.HasIndex("GameRecordId");
-
-                    b.ToTable("Wishlist");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -348,13 +325,6 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                         .WithMany("ShoppingCartItems")
                         .HasForeignKey("ShoppingCartId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("ConestogaVirtualGameStore.Web.Models.Wishlist", b =>
-                {
-                    b.HasOne("ConestogaVirtualGameStore.Web.Models.Game")
-                        .WithMany("Wishlist")
-                        .HasForeignKey("GameRecordId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

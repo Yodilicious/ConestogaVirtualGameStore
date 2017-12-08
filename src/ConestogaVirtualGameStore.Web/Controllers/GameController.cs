@@ -2,12 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Models;
     using Repository;
 
+    [Authorize]
     public class GameController : Controller
     {
         private readonly IGameRepository gameRepository;

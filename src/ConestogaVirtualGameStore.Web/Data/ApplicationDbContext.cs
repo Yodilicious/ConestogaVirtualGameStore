@@ -36,5 +36,6 @@ namespace ConestogaVirtualGameStore.Web.Data
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
         public DbSet<Wishlist> Wishlist { get; set; }
+        public DbSet<ApplicationUser> ApplicationUser { get; set; }
     }
 }

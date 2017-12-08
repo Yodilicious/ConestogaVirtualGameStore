@@ -1,30 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using ConestogaVirtualGameStore.Web.Data;
-using ConestogaVirtualGameStore.Web.Models;
-
-namespace ConestogaVirtualGameStore.Web.Controllers
+﻿namespace ConestogaVirtualGameStore.Web.Controllers
 {
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Microsoft.EntityFrameworkCore;
+    using Data;
+    using Models;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
 
+    [Authorize]
     public class ReviewsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
         public ReviewsController(ApplicationDbContext context)
         {
-            _context = context;
+            this._context = context;
         }
 
         // GET: Reviews
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Reviews.Include(r => r.Game);
+            var applicationDbContext = this._context.Reviews.Include(r => r.Game);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -36,7 +36,7 @@ namespace ConestogaVirtualGameStore.Web.Controllers
                 return NotFound();
             }
 
-            var review = await _context.Reviews
+            var review = await this._context.Reviews
                 .Include(r => r.Game)
                 .SingleOrDefaultAsync(m => m.RecordId == id);
             if (review == null)
@@ -47,10 +47,33 @@ namespace ConestogaVirtualGameStore.Web.Controllers
             return View(review);
         }
 
+        public async Task<IActionResult> Approve(long? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var review = await this._context.Reviews
+                .Include(r => r.Game)
+                .SingleOrDefaultAsync(m => m.RecordId == id);
+
+            if (review == null)
+            {
+                return NotFound();
+            }
+
+            review.IsApproved = true;
+
+            this._context.SaveChanges();
+
+            return RedirectToAction("Details", "Game", new {@id = review.Game.RecordId});
+        }
+        
         // GET: Reviews/Create
         public IActionResult Create()
         {
-            ViewData["GameId"] = HttpContext.Session.GetInt32("game_id");
+            this.ViewData["GameId"] = this.HttpContext.Session.GetInt32("game_id");
             return View();
         }
 
@@ -61,12 +84,24 @@ namespace ConestogaVirtualGameStore.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Author,Title,ReviewText,Rating,Date,GameId,RecordId")] Review review)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                review.Author = User.Identity.Name;
+                review.IsApproved = false;
+                review.Author = this.User.Identity.Name;
                 review.Date = DateTime.Now;
-                _context.Add(review);
-                await _context.SaveChangesAsync();
+
+                if (review.Rating < 0)
+                {
+                    review.Rating = 1;
+                }
+
+                if (review.Rating > 5)
+                {
+                    review.Rating = 5;
+                }
+
+                this._context.Add(review);
+                await this._context.SaveChangesAsync();
                 return RedirectToAction("Details", "Game", new { @id = review.GameId });
             }
 
@@ -81,12 +116,12 @@ namespace ConestogaVirtualGameStore.Web.Controllers
                 return NotFound();
             }
 
-            var review = await _context.Reviews.SingleOrDefaultAsync(m => m.RecordId == id);
+            var review = await this._context.Reviews.SingleOrDefaultAsync(m => m.RecordId == id);
             if (review == null)
             {
                 return NotFound();
             }
-            ViewData["GameId"] = new SelectList(_context.Games, "RecordId", "Description", review.GameId);
+            this.ViewData["GameId"] = new SelectList(this._context.Games, "RecordId", "Description", review.GameId);
             return View(review);
         }
 
@@ -102,12 +137,12 @@ namespace ConestogaVirtualGameStore.Web.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(review);
-                    await _context.SaveChangesAsync();
+                    this._context.Update(review);
+                    await this._context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -122,7 +157,7 @@ namespace ConestogaVirtualGameStore.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GameId"] = new SelectList(_context.Games, "RecordId", "Description", review.GameId);
+            this.ViewData["GameId"] = new SelectList(this._context.Games, "RecordId", "Description", review.GameId);
             return View(review);
         }
 
@@ -134,7 +169,7 @@ namespace ConestogaVirtualGameStore.Web.Controllers
                 return NotFound();
             }
 
-            var review = await _context.Reviews
+            var review = await this._context.Reviews
                 .Include(r => r.Game)
                 .SingleOrDefaultAsync(m => m.RecordId == id);
             if (review == null)
@@ -150,15 +185,15 @@ namespace ConestogaVirtualGameStore.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
-            var review = await _context.Reviews.SingleOrDefaultAsync(m => m.RecordId == id);
-            _context.Reviews.Remove(review);
-            await _context.SaveChangesAsync();
+            var review = await this._context.Reviews.SingleOrDefaultAsync(m => m.RecordId == id);
+            this._context.Reviews.Remove(review);
+            await this._context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ReviewExists(long id)
         {
-            return _context.Reviews.Any(e => e.RecordId == id);
+            return this._context.Reviews.Any(e => e.RecordId == id);
         }
     }
 }
