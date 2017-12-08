@@ -28,7 +28,6 @@ namespace ConestogaVirtualGameStore.Web.Controllers
             }
             var applicationDbcontext = _context.Games.Include(a => a.Wishlist);
             return View(await applicationDbcontext.ToListAsync());
-            return View(await _context.Wishlist.ToListAsync());
         }
 
         // GET: Wishlist/Details/5
