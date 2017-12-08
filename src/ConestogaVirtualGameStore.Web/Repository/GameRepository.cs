@@ -109,23 +109,22 @@
             this.context.Reviews.Add(review);
             this.context.SaveChanges();
         }
-        public Game addGametoWishlist(String Title)
+        public Game AddGametoWishlist(long id)
         {
 
-            var game = this.context.Games.FirstOrDefault(g => g.Title == Title);
+            var game = this.context.Games.FirstOrDefault(g => g.RecordId == id);
 
             if (game != null)
             {
-                var item = new Wishlist();
+                var wishlist = new Wishlist();
 
-                item.Title = game.Title;
-                item.ImageFileName = game.ImageFileName;
-                item.Price = game.Price;
+                wishlist.Title = game.Title;
+                wishlist.ImageFileName = game.ImageFileName;
+                wishlist.Price = game.Price;
 
-                game.Wishlist.Add(item);
+                game.Wishlist.Add(wishlist);
 
                 this.context.SaveChanges();
-
                 return game ;
             }
 

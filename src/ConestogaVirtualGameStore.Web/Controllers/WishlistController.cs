@@ -60,11 +60,7 @@ namespace ConestogaVirtualGameStore.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-<<<<<<< HEAD
         public async Task<IActionResult> Create([Bind("Title,Price,ImageFileName,RecordId")] Wishlist wishlist)
-=======
-        public async Task<IActionResult> Create([Bind("Title,ImageFileName,Price,RecordId")] Wishlist wishlist)
->>>>>>> 79d41529a5a71522eccdc10e27525a2bcf16d645
         {
             if (ModelState.IsValid)
             {
@@ -96,11 +92,7 @@ namespace ConestogaVirtualGameStore.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-<<<<<<< HEAD
         public async Task<IActionResult> Edit(long id, [Bind("Title,Price,ImageFileName,RecordId")] Wishlist wishlist)
-=======
-        public async Task<IActionResult> Edit(long id, [Bind("Title,ImageFileName,Price,RecordId")] Wishlist wishlist)
->>>>>>> 79d41529a5a71522eccdc10e27525a2bcf16d645
         {
             if (id != wishlist.RecordId)
             {
@@ -163,25 +155,5 @@ namespace ConestogaVirtualGameStore.Web.Controllers
         {
             return _context.Wishlist.Any(e => e.RecordId == id);
         }
-<<<<<<< HEAD
-=======
-        public async Task<IActionResult> Add(String Title)
-        {
-            Wishlist wishlist;
-
-            if (Title == null)
-            {
-                return NotFound();
-            }
-            var game = await _context.Games.SingleOrDefaultAsync(a => a.Title == Title);
-
-            if (wishlist == null)
-            {
-                return NotFound();
-            }
-
-            return View(wishlist);
-        }
->>>>>>> 79d41529a5a71522eccdc10e27525a2bcf16d645
     }
 }
