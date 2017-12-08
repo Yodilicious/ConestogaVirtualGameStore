@@ -57,48 +57,74 @@
     </div>
 </div>
 
-@if (User.Identity.IsAuthenticated)
-{
-    <div class="row">
-        <div class="col-md-9">&nbsp;</div>
-        <div class="col-md-3">
-            <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("Add", "Wishlist")'">Add To Wishlist</button>
-            <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("ConfirmShoppingCart", "Game", new {@id = Model.RecordId})'">Add To Cart</button>
-        </div>
+<div class="row">
+    <div class="col-md-9">&nbsp;</div>
+    <div class="col-md-3">
+        <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("Add", "Wishlist")'">Add To Wishlist</button>
+        <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("ConfirmShoppingCart", "Game", new {@id = Model.RecordId})'">Add To Cart</button>
     </div>
-}
+</div>
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
-@if (User.Identity.IsAuthenticated)
-{
-    <div class="row">
-        <div class="col-md-11">&nbsp;</div>
-        <div class="col-md-1">
-            <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("CreateReview", "Game", new {@id = Model.RecordId})'">Add Review</button>
-        </div>
+<div class="row">
+    <div class="col-md-11">&nbsp;</div>
+    <div class="col-md-1">
+        <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("CreateReview", "Game", new {@id = Model.RecordId})'">Add Review</button>
     </div>
-}
+</div>
 
-@foreach (var review in @Model.Reviews)
+@if (User.IsInRole("Moderator"))
 {
-    <div class="row">
-        <div class="col-md-1"><h4>Title: </h4></div>
-        <div class="col-md-2"><h4>@review.Title</h4></div>
-        <div class="col-md-1"></div>
-        <div class="col-md-1"><h4>Rating: </h4></div>
-        <div class="col-md-3">
-            @for (int i = 0; i < review.Rating; i++)
-            {
-                <img src="~/images/star.png" width="20" />
-            }
+    var ro = User.IsInRole("Moderator");
+    foreach (var review in @Model.Reviews)
+    {
+        <div class="row">
+            <div class="col-md-1"><h4>Title: </h4></div>
+            <div class="col-md-2"><h4>@review.Title</h4></div>
+            <div class="col-md-1"></div>
+            <div class="col-md-1"><h4>Rating: </h4></div>
+            <div class="col-md-3">
+                @for (int i = 0; i < review.Rating; i++)
+                {
+                    <img src="~/images/star.png" width="20" />
+                }
+            </div>
+            <div class="col-md-4">
+                @if (!review.IsApproved)
+                {
+                    <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("Approve", "Reviews", new {@id = Model.RecordId})'">Approve</button>
+                }
+            </div>
         </div>
-        <div class="col-md-4"></div>
-    </div>
-    <div class="row">
-        <div class="col-md-12"><p>@review.ReviewText</p></div>
-    </div>
-    <div class="row">&nbsp;</div>
+        <div class="row">
+            <div class="col-md-12"><p>@review.ReviewText</p></div>
+        </div>
+        <div class="row">&nbsp;</div>
+    }
+}
+else
+{
+    foreach (var review in @Model.Reviews.Where(r => r.IsApproved))
+    {
+        <div class="row">
+            <div class="col-md-1"><h4>Title: </h4></div>
+            <div class="col-md-2"><h4>@review.Title</h4></div>
+            <div class="col-md-1"></div>
+            <div class="col-md-1"><h4>Rating: </h4></div>
+            <div class="col-md-3">
+                @for (int i = 0; i < review.Rating; i++)
+                {
+                    <img src="~/images/star.png" width="20" />
+                }
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-12"><p>@review.ReviewText</p></div>
+        </div>
+        <div class="row">&nbsp;</div>
+    }
 }

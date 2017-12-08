@@ -1,17 +1,18 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using ConestogaVirtualGameStore.Web.Data;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
-using ConestogaVirtualGameStore.Web.Models;
-using Microsoft.AspNetCore.Http;
-using System;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-
-namespace ConestogaVirtualGameStore.Web.Controllers
+﻿namespace ConestogaVirtualGameStore.Web.Controllers
 {
+    using System.Linq;
+    using Microsoft.AspNetCore.Mvc;
+    using Data;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using System.Threading.Tasks;
+    using Models;
+    using Microsoft.AspNetCore.Http;
+    using System;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Microsoft.AspNetCore.Authorization;
+
+    [Authorize]
     public class RolesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,15 +23,15 @@ namespace ConestogaVirtualGameStore.Web.Controllers
             RoleManager<IdentityRole> roleManager,
             UserManager<ApplicationUser> userManager)
         {
-            _context = context;
-            RoleManager = roleManager;
-            UserManager = userManager;
+            this._context = context;
+            this.RoleManager = roleManager;
+            this.UserManager = userManager;
 
         }
         public async Task<IActionResult> Index()
         {
 
-            return View(await _context.Roles.ToListAsync());
+            return View(await this._context.Roles.ToListAsync());
         }
 
         public IActionResult Create()
@@ -43,11 +44,11 @@ namespace ConestogaVirtualGameStore.Web.Controllers
         {
             try
             {
-                _context.Roles.Add(new IdentityRole()
+                this._context.Roles.Add(new IdentityRole()
                 {
                     Name = collection["RoleName"]
                 });
-                await _context.SaveChangesAsync();
+                await this._context.SaveChangesAsync();
                 return RedirectToAction("Index", "Roles");
             }
             catch
@@ -57,33 +58,34 @@ namespace ConestogaVirtualGameStore.Web.Controllers
         }
         public ActionResult Delete(string roleName)
         {
-            var role = _context.Roles.Where(r => r.Name.Equals(roleName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
-            _context.Roles.Remove(role);
-            _context.SaveChanges();
+            var role = this._context.Roles.Where(r => r.Name.Equals(roleName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+            this._context.Roles.Remove(role);
+            this._context.SaveChanges();
             return RedirectToAction("Index");
         }
         public ActionResult ManageUsers()
         {
-            var roleList = _context.Roles.OrderBy(b => b.Name).ToList()
+            var roleList = this._context.Roles.OrderBy(b => b.Name).ToList()
                 .Select(bb => new SelectListItem { Value = bb.Name.ToString(), Text = bb.Name }).ToList();
 
 
-            ViewBag.Roles = roleList;
+            this.ViewBag.Roles = roleList;
             return View("ManageUsers");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddRoleToUser(string UserName, string RoleName)
+        public async Task<IActionResult> AddRoleToUser(string UserName, string RoleName)
         {
-            ApplicationUser user = _context.Users.Where(a => a.Email.Equals(UserName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
-            UserManager.AddToRoleAsync(user, RoleName);
+            ApplicationUser user = this._context.Users.FirstOrDefault(a => a.Email.Equals(UserName, StringComparison.CurrentCultureIgnoreCase));
+            await this.UserManager.AddToRoleAsync(user, RoleName);
 
-            ViewBag.Results = UserName + "has been added to the " + RoleName + "group";
+            this.ViewBag.Results = UserName + "has been added to the " + RoleName + "group";
 
+            //this._context.SaveChanges();
 
-            var roleList = _context.Roles.OrderBy(b => b.Name).ToList()
-               .Select(bb => new SelectListItem { Value = bb.Name.ToString(), Text = bb.Name }).ToList();
-            ViewBag.Roles = roleList;
+            //var roleList = this._context.Roles.OrderBy(b => b.Name).ToList()
+            //   .Select(bb => new SelectListItem { Value = bb.Name.ToString(), Text = bb.Name }).ToList();
+            //this.ViewBag.Roles = roleList;
 
             return RedirectToAction("Index");
 

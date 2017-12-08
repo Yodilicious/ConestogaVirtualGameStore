@@ -1,12 +1,13 @@
 ﻿namespace ConestogaVirtualGameStore.Web.Controllers
 {
     using System.Linq;
-    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Data;
+    using Microsoft.AspNetCore.Authorization;
     using Models;
 
+    [Authorize]
     public class EventController : Controller
     {
         private readonly ApplicationDbContext _context;

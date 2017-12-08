@@ -1,46 +1,47 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using ConestogaVirtualGameStore.Web.Data;
-using ConestogaVirtualGameStore.Web.Models;
-
-namespace ConestogaVirtualGameStore.Web.Controllers
+﻿namespace ConestogaVirtualGameStore.Web.Controllers
 {
     using System;
+    using Microsoft.AspNetCore.Authorization;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Microsoft.EntityFrameworkCore;
+    using Data;
+    using Models;
 
+    [Authorize]
     public class ShoppingCartController : Controller
     {
         private readonly ApplicationDbContext _context;
 
         public ShoppingCartController(ApplicationDbContext context)
         {
-            _context = context;
+            this._context = context;
         }
 
         // GET: ShoppingCart
         public async Task<IActionResult> Index()
         {
-            if (!User.Identity.IsAuthenticated)
+            if (!this.User.Identity.IsAuthenticated)
             {
                 return NotFound();
             }
 
-            var applicationDbContext = _context.ShoppingCartItems.Include(s => s.Game).Include(s => s.ShoppingCart)
-                .Where(s => s.ShoppingCart.HasPaid == false && s.ShoppingCart.User == User.Identity.Name);
+            var applicationDbContext = this._context.ShoppingCartItems.Include(s => s.Game).Include(s => s.ShoppingCart)
+                .Where(s => s.ShoppingCart.HasPaid == false && s.ShoppingCart.User == this.User.Identity.Name);
 
             return View(await applicationDbContext.ToListAsync());
         }
 
         public async Task<IActionResult> Checkout()
         {
-            if (!User.Identity.IsAuthenticated)
+            if (!this.User.Identity.IsAuthenticated)
             {
                 return NotFound();
             }
 
-            var cart = this._context.ShoppingCarts.FirstOrDefault(s => s.HasPaid == false && s.User == User.Identity.Name);
+            var cart = this._context.ShoppingCarts.FirstOrDefault(s => s.HasPaid == false && s.User == this.User.Identity.Name);
 
             if (cart == null)
             {
@@ -63,7 +64,7 @@ namespace ConestogaVirtualGameStore.Web.Controllers
                 return NotFound();
             }
 
-            var shoppingCartItem = await _context.ShoppingCartItems
+            var shoppingCartItem = await this._context.ShoppingCartItems
                 .Include(s => s.Game)
                 .Include(s => s.ShoppingCart)
                 .SingleOrDefaultAsync(m => m.RecordId == id);
@@ -78,8 +79,8 @@ namespace ConestogaVirtualGameStore.Web.Controllers
         // GET: ShoppingCart/Create
         public IActionResult Create()
         {
-            ViewData["GameId"] = new SelectList(_context.Games, "RecordId", "Description");
-            ViewData["ShoppingCartId"] = new SelectList(_context.ShoppingCarts, "RecordId", "RecordId");
+            this.ViewData["GameId"] = new SelectList(this._context.Games, "RecordId", "Description");
+            this.ViewData["ShoppingCartId"] = new SelectList(this._context.ShoppingCarts, "RecordId", "RecordId");
             return View();
         }
 
@@ -90,14 +91,14 @@ namespace ConestogaVirtualGameStore.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ShoppingCartId,GameId,Price,AddedOn,RecordId")] ShoppingCartItem shoppingCartItem)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                _context.Add(shoppingCartItem);
-                await _context.SaveChangesAsync();
+                this._context.Add(shoppingCartItem);
+                await this._context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GameId"] = new SelectList(_context.Games, "RecordId", "Description", shoppingCartItem.GameId);
-            ViewData["ShoppingCartId"] = new SelectList(_context.ShoppingCarts, "RecordId", "RecordId", shoppingCartItem.ShoppingCartId);
+            this.ViewData["GameId"] = new SelectList(this._context.Games, "RecordId", "Description", shoppingCartItem.GameId);
+            this.ViewData["ShoppingCartId"] = new SelectList(this._context.ShoppingCarts, "RecordId", "RecordId", shoppingCartItem.ShoppingCartId);
             return View(shoppingCartItem);
         }
 
@@ -109,13 +110,13 @@ namespace ConestogaVirtualGameStore.Web.Controllers
                 return NotFound();
             }
 
-            var shoppingCartItem = await _context.ShoppingCartItems.SingleOrDefaultAsync(m => m.RecordId == id);
+            var shoppingCartItem = await this._context.ShoppingCartItems.SingleOrDefaultAsync(m => m.RecordId == id);
             if (shoppingCartItem == null)
             {
                 return NotFound();
             }
-            ViewData["GameId"] = new SelectList(_context.Games, "RecordId", "Description", shoppingCartItem.GameId);
-            ViewData["ShoppingCartId"] = new SelectList(_context.ShoppingCarts, "RecordId", "RecordId", shoppingCartItem.ShoppingCartId);
+            this.ViewData["GameId"] = new SelectList(this._context.Games, "RecordId", "Description", shoppingCartItem.GameId);
+            this.ViewData["ShoppingCartId"] = new SelectList(this._context.ShoppingCarts, "RecordId", "RecordId", shoppingCartItem.ShoppingCartId);
             return View(shoppingCartItem);
         }
 
@@ -131,12 +132,12 @@ namespace ConestogaVirtualGameStore.Web.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(shoppingCartItem);
-                    await _context.SaveChangesAsync();
+                    this._context.Update(shoppingCartItem);
+                    await this._context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -151,8 +152,8 @@ namespace ConestogaVirtualGameStore.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GameId"] = new SelectList(_context.Games, "RecordId", "Description", shoppingCartItem.GameId);
-            ViewData["ShoppingCartId"] = new SelectList(_context.ShoppingCarts, "RecordId", "RecordId", shoppingCartItem.ShoppingCartId);
+            this.ViewData["GameId"] = new SelectList(this._context.Games, "RecordId", "Description", shoppingCartItem.GameId);
+            this.ViewData["ShoppingCartId"] = new SelectList(this._context.ShoppingCarts, "RecordId", "RecordId", shoppingCartItem.ShoppingCartId);
             return View(shoppingCartItem);
         }
 
@@ -164,7 +165,7 @@ namespace ConestogaVirtualGameStore.Web.Controllers
                 return NotFound();
             }
 
-            var shoppingCartItem = await _context.ShoppingCartItems
+            var shoppingCartItem = await this._context.ShoppingCartItems
                 .Include(s => s.Game)
                 .Include(s => s.ShoppingCart)
                 .SingleOrDefaultAsync(m => m.RecordId == id);
@@ -181,15 +182,15 @@ namespace ConestogaVirtualGameStore.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
-            var shoppingCartItem = await _context.ShoppingCartItems.SingleOrDefaultAsync(m => m.RecordId == id);
-            _context.ShoppingCartItems.Remove(shoppingCartItem);
-            await _context.SaveChangesAsync();
+            var shoppingCartItem = await this._context.ShoppingCartItems.SingleOrDefaultAsync(m => m.RecordId == id);
+            this._context.ShoppingCartItems.Remove(shoppingCartItem);
+            await this._context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ShoppingCartItemExists(long id)
         {
-            return _context.ShoppingCartItems.Any(e => e.RecordId == id);
+            return this._context.ShoppingCartItems.Any(e => e.RecordId == id);
         }
     }
 }

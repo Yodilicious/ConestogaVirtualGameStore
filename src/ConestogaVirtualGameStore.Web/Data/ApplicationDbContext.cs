@@ -1,4 +1,6 @@
-﻿namespace ConestogaVirtualGameStore.Web.Data
+﻿using Microsoft.EntityFrameworkCore;
+using ConestogaVirtualGameStore.Web.Models;
+namespace ConestogaVirtualGameStore.Web.Data
 {
     using Configuration;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -32,5 +34,6 @@
         public DbSet<Event> Events { get; set; }
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
+        public DbSet<ConestogaVirtualGameStore.Web.Models.ApplicationUser> ApplicationUser { get; set; }
     }
 }
