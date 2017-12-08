@@ -10,6 +10,7 @@ using ConestogaVirtualGameStore.Web.Services;
 
 namespace ConestogaVirtualGameStore.Web
 {
+    using System;
     using Repository;
 
     public class Startup
@@ -34,6 +35,13 @@ namespace ConestogaVirtualGameStore.Web
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<IGameRepository, GameRepository>();
+            services.AddMvc().AddSessionStateTempDataProvider();
+
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = ".ConestogaVirtualGameStore.Session";
+                options.IdleTimeout = TimeSpan.FromDays(1);
+            });
 
             services.AddMvc();
         }
@@ -51,6 +59,8 @@ namespace ConestogaVirtualGameStore.Web
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            app.UseSession();
 
             app.UseStaticFiles();
 

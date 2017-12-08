@@ -21,7 +21,7 @@
 
         public Game GetGame(long id)
         {
-            return this.context.Games.SingleOrDefault(m => m.RecordId == id);
+            return this.context.Games.Include(g => g.Reviews).SingleOrDefault(m => m.RecordId == id);
         }
 
         public void AddGame(Game game)
@@ -74,6 +74,12 @@
             }
 
             return null;
+        }
+
+        public void AddReview(Review review)
+        {
+            this.context.Reviews.Add(review);
+            this.context.SaveChanges();
         }
 
         public bool Exists(long id)

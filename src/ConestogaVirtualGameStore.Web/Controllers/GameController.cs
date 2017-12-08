@@ -1,6 +1,7 @@
 ﻿namespace ConestogaVirtualGameStore.Web.Controllers
 {
     using System;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Models;
@@ -54,6 +55,13 @@
                 return RedirectToAction(nameof(Index));
             }
             return View(game);
+        }
+
+        public IActionResult CreateReview(long id)
+        {
+            HttpContext.Session.SetInt32("game_id", (int)id);
+
+            return RedirectToAction("Create", "Reviews");
         }
 
         // GET: Game/Edit/5

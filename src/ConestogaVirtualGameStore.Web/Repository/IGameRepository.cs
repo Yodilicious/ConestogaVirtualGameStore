@@ -13,5 +13,6 @@
         void RemoveGame(Game game);
         bool Exists(long id);
         Game AddGameToShoppingCart(long id);
+        void AddReview(Review review);
     }
 }

@@ -11,10 +11,16 @@
 </div>
 
 <div class="row">
-    <div class="col-md-12">
-        <button type="submit" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "Game")'">Add New Game</button>
-        <button type="submit" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "Event")'">Add New Event</button>
-    </div>
+    @if (User.Identity.IsAuthenticated)
+    {
+        if (User.IsInRole("Employee"))
+        {
+            <div style="display: flex; flex-direction: row; justify-content: center;">
+                <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("Create", "Game")'">Add New Game</button>&nbsp;&nbsp;
+                <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("Create", "Event")'">Add New Event</button>
+            </div>
+        }
+    }
 </div>
 
 <div class="row">

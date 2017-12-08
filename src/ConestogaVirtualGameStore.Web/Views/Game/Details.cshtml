@@ -15,9 +15,32 @@
     <div class="col-md-4">
         <img class="table-image" src="~/images/games/@Model.ImageFileName" />
     </div>
-    <div class="col-md-8">
+    <div class="col-md-6">
         <p>@Model.Description</p>
     </div>
+    <div class="col-md-2">
+        <h3>$@Model.Price</h3>
+    </div>
+</div>
+
+<div class="row">&nbsp;</div>
+
+<div class="row">
+    <div class="col-md-1">Developer: </div>
+    <div class="col-md-2">@Model.Developer</div>
+    <div class="col-md-9"></div>
+</div>
+
+<div class="row">
+    <div class="col-md-1">Publisher: </div>
+    <div class="col-md-2">@Model.Publisher</div>
+    <div class="col-md-9"></div>
+</div>
+
+<div class="row">
+    <div class="col-md-1">Published: </div>
+    <div class="col-md-2">@Model.Date.ToShortDateString()</div>
+    <div class="col-md-9"></div>
 </div>
 
 <div class="row">
@@ -26,20 +49,46 @@
         {
             if (User.IsInRole("Employee"))
             {
-                <a asp-action="Edit" asp-route-id="@Model.RecordId">Edit</a> <br />
-                <a asp-action="Delete" asp-route-id="@Model.RecordId">Delete</a><br />
+                <a asp-action="Edit" asp-route-id="@Model.RecordId">Edit</a>
+                <br/>
+                <a asp-action="Delete" asp-route-id="@Model.RecordId">Delete</a><br/>
             }
         }
     </div>
 </div>
 
 <div class="row">
-    <div class="col-md-12">
-        <button type="submit" class="btn btn-primary" onclick="location.href='@Url.Action("Add", "Wishlist")'">Add To Wishlist</button>
-        <button type="submit" class="btn btn-primary" onclick="location.href='@Url.Action("ConfirmShoppingCart", "Game")'">Add To Cart</button>
+    <div class="col-md-9">&nbsp;</div>
+    <div class="col-md-3">
+        <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("Add", "Wishlist")'">Add To Wishlist</button>
+        <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("ConfirmShoppingCart", "Game", new { @id = Model.RecordId })'">Add To Cart</button>
     </div>
 </div>
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+<div class="row">
+    <div class="col-md-11">&nbsp;</div>
+    <div class="col-md-1">
+        <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("CreateReview", "Game", new { @id = Model.RecordId })'">Add Review</button>
+    </div>
+</div>
+
+@foreach (var review in @Model.Reviews)
+{
+    <div class="row">
+        <div class="col-md-1">Title: </div>
+        <div class="col-md-2">@review.Title</div>
+        <div class="col-md-1"></div>
+        <div class="col-md-1">Rating: </div>
+        <div class="col-md-2">@review.Rating</div>
+        <div class="col-md-5"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">@review.ReviewText</div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <div class="row">&nbsp;</div>
+}
