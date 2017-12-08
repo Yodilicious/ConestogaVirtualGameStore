@@ -44,13 +44,14 @@
             this.context.Games.Remove(game);
         }
 
-        public Game AddGameToShoppingCart(long id)
+        public Game AddGameToShoppingCart(long id, string user)
         {
-            var cart = this.context.ShoppingCarts.Include(s => s.ShoppingCartItems).FirstOrDefault(s => s.HasPaid == false);
+            var cart = this.context.ShoppingCarts.Include(s => s.ShoppingCartItems).FirstOrDefault(s => s.HasPaid == false && s.User == user);
 
             if (cart == null)
             {
                 cart = new ShoppingCart();
+                cart.User = user;
 
                 if (cart.ShoppingCartItems == null)
                 {

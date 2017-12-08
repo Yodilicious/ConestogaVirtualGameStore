@@ -63,7 +63,7 @@ namespace ConestogaVirtualGameStore.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                review.Author = Guid.Empty;
+                review.Author = User.Identity.Name;
                 review.Date = DateTime.Now;
                 _context.Add(review);
                 await _context.SaveChangesAsync();

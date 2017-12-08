@@ -13,7 +13,7 @@
         void UpdateGame(Game game);
         void RemoveGame(Game game);
         bool Exists(long id);
-        Game AddGameToShoppingCart(long id);
+        Game AddGameToShoppingCart(long id, string user);
         void AddReview(Review review);
     }
 }

@@ -160,7 +160,12 @@
 
         public IActionResult ConfirmShoppingCart(long id)
         {
-            var game = this.gameRepository.AddGameToShoppingCart(id);
+            if (!User.Identity.IsAuthenticated)
+            {
+                return NotFound();
+            }
+
+            var game = this.gameRepository.AddGameToShoppingCart(id, User.Identity.Name);
 
             if (game == null)
             {

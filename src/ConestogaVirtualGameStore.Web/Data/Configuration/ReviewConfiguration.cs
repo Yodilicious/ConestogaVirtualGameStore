@@ -14,6 +14,9 @@
                 .ValueGeneratedOnAdd()
                 .IsRequired();
 
+            builder.Property(r => r.Author)
+                .IsRequired();
+
             builder.Property(r => r.Title)
                 .HasMaxLength(128)
                 .IsRequired();

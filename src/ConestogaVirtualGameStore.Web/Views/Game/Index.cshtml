@@ -51,7 +51,10 @@
                 }
                 
                 <a asp-action="Details" asp-route-id="@item.RecordId">Details</a> |
+            @if (User.Identity.IsAuthenticated)
+            { 
                 <a asp-action="ConfirmShoppingCart" asp-route-id="@item.RecordId">Add To Cart</a> <br />
+            }
             </td>
         </tr>
 }

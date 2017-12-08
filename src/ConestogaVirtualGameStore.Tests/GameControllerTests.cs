@@ -36,7 +36,7 @@ namespace ConestogaVirtualGameStore.Tests
 
             using (var controller = new GameController(mock.Object))
             {
-                var result = controller.Index() as ViewResult;
+                var result = controller.Index("") as ViewResult;
 
                 Assert.NotNull(result);
                 Assert.True(string.IsNullOrEmpty(result.ViewName) || result.ViewName == "Index");

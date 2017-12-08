@@ -22,15 +22,25 @@ namespace ConestogaVirtualGameStore.Web.Controllers
         // GET: ShoppingCart
         public async Task<IActionResult> Index()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return NotFound();
+            }
+
             var applicationDbContext = _context.ShoppingCartItems.Include(s => s.Game).Include(s => s.ShoppingCart)
-                .Where(s => s.ShoppingCart.HasPaid == false);
+                .Where(s => s.ShoppingCart.HasPaid == false && s.ShoppingCart.User == User.Identity.Name);
 
             return View(await applicationDbContext.ToListAsync());
         }
 
         public async Task<IActionResult> Checkout()
         {
-            var cart = this._context.ShoppingCarts.FirstOrDefault(s => s.HasPaid == false);
+            if (!User.Identity.IsAuthenticated)
+            {
+                return NotFound();
+            }
+
+            var cart = this._context.ShoppingCarts.FirstOrDefault(s => s.HasPaid == false && s.User == User.Identity.Name);
 
             if (cart == null)
             {

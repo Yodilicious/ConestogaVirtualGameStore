@@ -14,6 +14,9 @@
                 .ValueGeneratedOnAdd()
                 .IsRequired();
 
+            builder.Property(s => s.User)
+                .IsRequired();
+
             builder.Property(s => s.PurcheasedOn)
                 .HasColumnType("datetime2")
                 .IsRequired();

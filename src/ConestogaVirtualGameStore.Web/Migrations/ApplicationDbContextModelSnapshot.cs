@@ -130,7 +130,8 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                     b.Property<long>("RecordId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid>("Author");
+                    b.Property<string>("Author")
+                        .IsRequired();
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -162,6 +163,9 @@ namespace ConestogaVirtualGameStore.Web.Migrations
 
                     b.Property<DateTime>("PurcheasedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("User")
+                        .IsRequired();
 
                     b.HasKey("RecordId");
 

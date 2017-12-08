@@ -11,7 +11,7 @@ using System;
 namespace ConestogaVirtualGameStore.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20171207164650_Initial")]
+    [Migration("20171208041650_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -131,7 +131,8 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                     b.Property<long>("RecordId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid>("Author");
+                    b.Property<string>("Author")
+                        .IsRequired();
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -163,6 +164,9 @@ namespace ConestogaVirtualGameStore.Web.Migrations
 
                     b.Property<DateTime>("PurcheasedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("User")
+                        .IsRequired();
 
                     b.HasKey("RecordId");
 

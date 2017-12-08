@@ -5,6 +5,7 @@
 
     public class ShoppingCart : BaseModel
     {
+        public string User { get; set; }
         public DateTime PurcheasedOn { get; set; }
         public bool HasPaid { get; set; }
 

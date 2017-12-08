@@ -89,7 +89,8 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                     RecordId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     HasPaid = table.Column<bool>(type: "bit", nullable: false),
-                    PurcheasedOn = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    PurcheasedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    User = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -208,7 +209,7 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                 {
                     RecordId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Author = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Author = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     GameId = table.Column<long>(type: "bigint", nullable: false),
                     Rating = table.Column<int>(type: "int", nullable: false),
