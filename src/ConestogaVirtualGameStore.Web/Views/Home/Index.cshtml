@@ -1,4 +1,6 @@
-﻿@{
+﻿@model Game[,]
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -11,7 +13,7 @@
 <div class="row">
     <div class="col-md-12">
         <button type="submit" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "Game")'">Add New Game</button>
-        <button type="submit" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "Evant")'">Add New Event</button>
+        <button type="submit" class="btn btn-primary" onclick="location.href='@Url.Action("Create", "Event")'">Add New Event</button>
     </div>
 </div>
 
@@ -19,21 +21,15 @@
     <div class="col-md-12">
         <table class="table">
             <tbody>
+            @for (int i = 0; i < 3; i++)
+            {
                 <tr>
-                    <td><img class="table-image" src="~/images/games/assassins_creed_origins.jpg" /></td>
-                    <td><img class="table-image" src="~/images/games/deus_ex.jpg" /></td>
-                    <td><img class="table-image" src="~/images/games/south_park_fractured_but_whole.jpg" /></td>
-                </tr>
-                <tr>
-                    <td><img class="table-image" src="~/images/games/divinity_original_sin.jpg" /></td>
-                    <td><img class="table-image" src="~/images/games/fallout_4.jpg" /></td>
-                    <td><img class="table-image" src="~/images/games/halo_wars.jpg" /></td>
-                </tr>
-                <tr>
-                    <td><img class="table-image" src="~/images/games/halo_spartan_strike.jpg" /></td>
-                    <td><img class="table-image" src="~/images/games/shadow_of_war.jpg" /></td>
-                    <td><img class="table-image" src="~/images/games/witcher_wild_hunt.jpg" /></td>
-                </tr>
+                    @for (int j = 0; j < 3; j++)
+                    {
+                        <td><a href="@Url.Action("Details", "Game", new { @id = @Model[i, j].RecordId })"><img class="table-image" src="~/images/games/@Model[i, j].ImageFileName" /></a></td>
+                    }
+                </tr>    
+            }
             </tbody>
         </table>
     </div>

@@ -1,8 +1,10 @@
 ﻿namespace ConestogaVirtualGameStore.Web.Repository
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Data;
+    using Microsoft.EntityFrameworkCore;
     using Models;
 
     public class GameRepository : IGameRepository
@@ -10,6 +12,11 @@
         public List<Game> GetGames()
         {
             return this.context.Games.ToList();
+        }
+
+        public List<Game> GetLastNineGames()
+        {
+            return this.context.Games.Take(9).OrderByDescending(g => g.Date).ToList();
         }
 
         public Game GetGame(long id)
@@ -30,6 +37,43 @@
         public void RemoveGame(Game game)
         {
             this.context.Games.Remove(game);
+        }
+
+        public Game AddGameToShoppingCart(long id)
+        {
+            var cart = this.context.ShoppingCarts.Include(s => s.ShoppingCartItems).FirstOrDefault(s => s.HasPaid == false);
+
+            if (cart == null)
+            {
+                cart = new ShoppingCart();
+
+                if (cart.ShoppingCartItems == null)
+                {
+                    cart.ShoppingCartItems = new List<ShoppingCartItem>();
+                }
+
+                this.context.ShoppingCarts.Add(cart);
+            }
+
+            var game = this.context.Games.FirstOrDefault(g => g.RecordId == id);
+
+            if (game != null)
+            {
+                var item = new ShoppingCartItem();
+
+                item.Game = game;
+                item.ShoppingCart = cart;
+                item.Price = game.Price;
+                item.AddedOn = DateTime.Now;
+
+                cart.ShoppingCartItems.Add(item);
+
+                this.context.SaveChanges();
+
+                return game;
+            }
+
+            return null;
         }
 
         public bool Exists(long id)

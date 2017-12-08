@@ -1,18 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using ConestogaVirtualGameStore.Web.Models;
-
-namespace ConestogaVirtualGameStore.Web.Controllers
+﻿namespace ConestogaVirtualGameStore.Web.Controllers
 {
+    using System.Diagnostics;
+    using Microsoft.AspNetCore.Mvc;
+    using Models;
+    using Repository;
+
     public class HomeController : Controller
     {
+        private readonly IGameRepository gameRepository;
+
+        public HomeController(IGameRepository gameRepository)
+        {
+            this.gameRepository = gameRepository;
+        }
+
         public IActionResult Index()
         {
-            return View();
+            Game[,] games = new Game[3, 3];
+
+            var gamesArray = this.gameRepository.GetLastNineGames().ToArray();
+            var index = 0;
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    games[i, j] = gamesArray[index];
+                    index++;
+                }
+            }
+
+            return View(games);
         }
 
         public IActionResult About()

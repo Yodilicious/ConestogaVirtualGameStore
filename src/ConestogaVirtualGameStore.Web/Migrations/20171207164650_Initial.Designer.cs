@@ -11,7 +11,7 @@ using System;
 namespace ConestogaVirtualGameStore.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20171011005645_Initial")]
+    [Migration("20171207164650_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,6 +70,26 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("ConestogaVirtualGameStore.Web.Models.Event", b =>
+                {
+                    b.Property<long>("RecordId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired();
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(128);
+
+                    b.HasKey("RecordId");
+
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("ConestogaVirtualGameStore.Web.Models.Game", b =>
@@ -132,6 +152,44 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                     b.HasIndex("GameId");
 
                     b.ToTable("Reviews");
+                });
+
+            modelBuilder.Entity("ConestogaVirtualGameStore.Web.Models.ShoppingCart", b =>
+                {
+                    b.Property<long>("RecordId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("HasPaid");
+
+                    b.Property<DateTime>("PurcheasedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("RecordId");
+
+                    b.ToTable("ShoppingCarts");
+                });
+
+            modelBuilder.Entity("ConestogaVirtualGameStore.Web.Models.ShoppingCartItem", b =>
+                {
+                    b.Property<long>("RecordId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("AddedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("GameId");
+
+                    b.Property<decimal>("Price");
+
+                    b.Property<long>("ShoppingCartId");
+
+                    b.HasKey("RecordId");
+
+                    b.HasIndex("GameId");
+
+                    b.HasIndex("ShoppingCartId");
+
+                    b.ToTable("ShoppingCartItems");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -247,6 +305,19 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                     b.HasOne("ConestogaVirtualGameStore.Web.Models.Game", "Game")
                         .WithMany("Reviews")
                         .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("ConestogaVirtualGameStore.Web.Models.ShoppingCartItem", b =>
+                {
+                    b.HasOne("ConestogaVirtualGameStore.Web.Models.Game", "Game")
+                        .WithMany("ShoppingCartItems")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ConestogaVirtualGameStore.Web.Models.ShoppingCart", "ShoppingCart")
+                        .WithMany("ShoppingCartItems")
+                        .HasForeignKey("ShoppingCartId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

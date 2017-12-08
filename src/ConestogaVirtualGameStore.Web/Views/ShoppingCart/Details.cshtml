@@ -1,0 +1,42 @@
+﻿@model ConestogaVirtualGameStore.Web.Models.ShoppingCartItem
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ShoppingCartItem</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AddedOn)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AddedOn)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Game)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Game.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ShoppingCart)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ShoppingCart.RecordId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.RecordId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -138,6 +138,18 @@
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult ConfirmShoppingCart(long id)
+        {
+            var game = this.gameRepository.AddGameToShoppingCart(id);
+
+            if (game == null)
+            {
+                return NotFound();
+            }
+
+            return View(game);
+        }
+
         private bool GameExists(long id)
         {
             return this.gameRepository.Exists(id);

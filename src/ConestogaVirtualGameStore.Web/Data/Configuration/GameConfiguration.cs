@@ -43,6 +43,10 @@
             builder.HasMany(g => g.Reviews)
                 .WithOne(r => r.Game)
                 .HasForeignKey(g => g.GameId);
+
+            builder.HasMany(g => g.ShoppingCartItems)
+                .WithOne(s => s.Game)
+                .HasForeignKey(s => s.GameId);
         }
     }
 }

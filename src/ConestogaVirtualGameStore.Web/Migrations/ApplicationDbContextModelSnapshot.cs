@@ -153,6 +153,44 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                     b.ToTable("Reviews");
                 });
 
+            modelBuilder.Entity("ConestogaVirtualGameStore.Web.Models.ShoppingCart", b =>
+                {
+                    b.Property<long>("RecordId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("HasPaid");
+
+                    b.Property<DateTime>("PurcheasedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("RecordId");
+
+                    b.ToTable("ShoppingCarts");
+                });
+
+            modelBuilder.Entity("ConestogaVirtualGameStore.Web.Models.ShoppingCartItem", b =>
+                {
+                    b.Property<long>("RecordId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("AddedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("GameId");
+
+                    b.Property<decimal>("Price");
+
+                    b.Property<long>("ShoppingCartId");
+
+                    b.HasKey("RecordId");
+
+                    b.HasIndex("GameId");
+
+                    b.HasIndex("ShoppingCartId");
+
+                    b.ToTable("ShoppingCartItems");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -266,6 +304,19 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                     b.HasOne("ConestogaVirtualGameStore.Web.Models.Game", "Game")
                         .WithMany("Reviews")
                         .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("ConestogaVirtualGameStore.Web.Models.ShoppingCartItem", b =>
+                {
+                    b.HasOne("ConestogaVirtualGameStore.Web.Models.Game", "Game")
+                        .WithMany("ShoppingCartItems")
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ConestogaVirtualGameStore.Web.Models.ShoppingCart", "ShoppingCart")
+                        .WithMany("ShoppingCartItems")
+                        .HasForeignKey("ShoppingCartId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

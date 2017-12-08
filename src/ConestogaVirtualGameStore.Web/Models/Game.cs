@@ -16,5 +16,6 @@
         public string ImageFileName { get; set; }
 
         public IList<Review> Reviews { get; set; }
+        public IList<ShoppingCartItem> ShoppingCartItems { get; set; }
     }
 }

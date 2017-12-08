@@ -49,6 +49,21 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Events",
+                columns: table => new
+                {
+                    RecordId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Events", x => x.RecordId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Games",
                 columns: table => new
                 {
@@ -65,6 +80,20 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Games", x => x.RecordId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ShoppingCarts",
+                columns: table => new
+                {
+                    RecordId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    HasPaid = table.Column<bool>(type: "bit", nullable: false),
+                    PurcheasedOn = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShoppingCarts", x => x.RecordId);
                 });
 
             migrationBuilder.CreateTable(
@@ -197,6 +226,34 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ShoppingCartItems",
+                columns: table => new
+                {
+                    RecordId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AddedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    GameId = table.Column<long>(type: "bigint", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18, 2)", nullable: false),
+                    ShoppingCartId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShoppingCartItems", x => x.RecordId);
+                    table.ForeignKey(
+                        name: "FK_ShoppingCartItems_Games_GameId",
+                        column: x => x.GameId,
+                        principalTable: "Games",
+                        principalColumn: "RecordId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ShoppingCartItems_ShoppingCarts_ShoppingCartId",
+                        column: x => x.ShoppingCartId,
+                        principalTable: "ShoppingCarts",
+                        principalColumn: "RecordId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -240,6 +297,16 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                 name: "IX_Reviews_GameId",
                 table: "Reviews",
                 column: "GameId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShoppingCartItems_GameId",
+                table: "ShoppingCartItems",
+                column: "GameId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShoppingCartItems_ShoppingCartId",
+                table: "ShoppingCartItems",
+                column: "ShoppingCartId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -260,7 +327,13 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Events");
+
+            migrationBuilder.DropTable(
                 name: "Reviews");
+
+            migrationBuilder.DropTable(
+                name: "ShoppingCartItems");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -270,6 +343,9 @@ namespace ConestogaVirtualGameStore.Web.Migrations
 
             migrationBuilder.DropTable(
                 name: "Games");
+
+            migrationBuilder.DropTable(
+                name: "ShoppingCarts");
         }
     }
 }
