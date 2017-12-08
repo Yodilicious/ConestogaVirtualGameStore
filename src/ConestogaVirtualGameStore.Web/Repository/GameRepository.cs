@@ -109,6 +109,28 @@
             this.context.Reviews.Add(review);
             this.context.SaveChanges();
         }
+        public Game addGametoWishlist(String Title)
+        {
+
+            var game = this.context.Games.FirstOrDefault(g => g.Title == Title);
+
+            if (game != null)
+            {
+                var item = new Wishlist();
+
+                item.Title = game.Title;
+                item.ImageFileName = game.ImageFileName;
+                item.Price = game.Price;
+
+                game.Wishlist.Add(item);
+
+                this.context.SaveChanges();
+
+                return game ;
+            }
+
+            return null;
+        }
 
         public bool Exists(long id)
         {
