@@ -14,6 +14,11 @@
             return this.context.Games.ToList();
         }
 
+        public List<Game> GetGames(string searchText)
+        {
+            return this.context.Games.Where(g => g.Title.Contains(searchText)).ToList();
+        }
+
         public List<Game> GetLastNineGames()
         {
             return this.context.Games.Take(9).OrderByDescending(g => g.Date).ToList();

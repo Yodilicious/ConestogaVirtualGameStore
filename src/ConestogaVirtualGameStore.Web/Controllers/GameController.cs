@@ -1,6 +1,7 @@
 ﻿namespace ConestogaVirtualGameStore.Web.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -16,9 +17,20 @@
             this.gameRepository = gameRepository;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string id)
         {
-            return View(this.gameRepository.GetGames());
+            List<Game> data = null;
+
+            if (!string.IsNullOrEmpty(id))
+            {
+                data = this.gameRepository.GetGames(id);
+            }
+            else
+            {
+                data = this.gameRepository.GetGames();
+            }
+
+            return View(data);
         }
         
         public IActionResult Details(long? id)

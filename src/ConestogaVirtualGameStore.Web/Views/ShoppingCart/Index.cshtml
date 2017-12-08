@@ -8,23 +8,38 @@
 
 <table class="table">
     <tbody>
-@foreach (var item in Model) {
+    @{decimal total = 0M;}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <img class="list-image" src="~/images/games/@item.Game.ImageFileName"/>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Game.Title)
+            </td>
+            <td>
+                $@Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.RecordId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.RecordId">Remove</a>
+            </td>
+        </tr>
+        total += item.Price;
+    }
     <tr>
         <td>
-            <img class="list-image" src="~/images/games/@item.Game.ImageFileName" />
+        </td>
+        <td style="text-align: right;">
+            Total
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Game.Title)
+            $@total
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Price)
-        </td>
-        <td>
-            <a asp-action="Details" asp-route-id="@item.RecordId">Details</a> |
-            <a asp-action="Delete" asp-route-id="@item.RecordId">Remove</a>
         </td>
     </tr>
-}
     </tbody>
 </table>
 

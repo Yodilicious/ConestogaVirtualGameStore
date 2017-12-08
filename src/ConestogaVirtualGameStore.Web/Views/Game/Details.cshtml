@@ -79,16 +79,20 @@
 @foreach (var review in @Model.Reviews)
 {
     <div class="row">
-        <div class="col-md-1">Title: </div>
-        <div class="col-md-2">@review.Title</div>
+        <div class="col-md-1"><h4>Title: </h4></div>
+        <div class="col-md-2"><h4>@review.Title</h4></div>
         <div class="col-md-1"></div>
-        <div class="col-md-1">Rating: </div>
-        <div class="col-md-2">@review.Rating</div>
-        <div class="col-md-5"></div>
+        <div class="col-md-1"><h4>Rating: </h4></div>
+        <div class="col-md-3">
+            @for (int i = 0; i < review.Rating; i++)
+            {
+                <img src="~/images/star.png" width="20" />
+            }
+        </div>
+        <div class="col-md-4"></div>
     </div>
     <div class="row">
-        <div class="col-md-12">@review.ReviewText</div>
+        <div class="col-md-12"><p>@review.ReviewText</p></div>
     </div>
-    <div class="row">&nbsp;</div>
     <div class="row">&nbsp;</div>
 }

@@ -6,6 +6,7 @@
     public interface IGameRepository : IRepository
     {
         List<Game> GetGames();
+        List<Game> GetGames(string searchText);
         List<Game> GetLastNineGames();
         Game GetGame(long id);
         void AddGame(Game game);
