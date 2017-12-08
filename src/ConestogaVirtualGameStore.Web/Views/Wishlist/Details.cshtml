@@ -1,0 +1,49 @@
+﻿@model ConestogaVirtualGameStore.Web.Models.Wishlist
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Wishlist</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt>
+<<<<<<< HEAD
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ImageFileName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ImageFileName)
+=======
+            @Html.DisplayNameFor(model => model.ImageFileName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ImageFileName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+>>>>>>> 79d41529a5a71522eccdc10e27525a2bcf16d645
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.RecordId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -43,7 +43,6 @@
         {
             this.context.Games.Remove(game);
         }
-
         public Game AddGameToShoppingCart(long id, string user)
         {
             var cart = this.context.ShoppingCarts.Include(s => s.ShoppingCartItems).FirstOrDefault(s => s.HasPaid == false && s.User == user);
@@ -81,11 +80,55 @@
 
             return null;
         }
+        public Game AddGameToWishlist(long id)
+        {
+            var game = this.context.Games.FirstOrDefault(a => a.RecordId == id);
+            if (game != null)
+            {
+                if (game.Wishlist == null)
+                {
+                    game.Wishlist = new List<Wishlist>();
+                }
+                var wishlist = new Wishlist();
+                wishlist.Title = game.Title;
+                wishlist.ImageFileName = game.ImageFileName;
+                wishlist.Price = game.Price;
+                game.Wishlist.Add(wishlist);
+                this.context.SaveChanges();
 
+                return game;
+            }
+
+
+
+
+            return null;
+        }
         public void AddReview(Review review)
         {
             this.context.Reviews.Add(review);
             this.context.SaveChanges();
+        }
+        public Game AddGametoWishlist(long id)
+        {
+
+            var game = this.context.Games.FirstOrDefault(g => g.RecordId == id);
+
+            if (game != null)
+            {
+                var wishlist = new Wishlist();
+
+                wishlist.Title = game.Title;
+                wishlist.ImageFileName = game.ImageFileName;
+                wishlist.Price = game.Price;
+
+                game.Wishlist.Add(wishlist);
+
+                this.context.SaveChanges();
+                return game ;
+            }
+
+            return null;
         }
 
         public bool Exists(long id)

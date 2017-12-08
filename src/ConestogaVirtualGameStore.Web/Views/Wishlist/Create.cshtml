@@ -1,0 +1,54 @@
+﻿@model ConestogaVirtualGameStore.Web.Models.Wishlist
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<h4>Wishlist</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+<<<<<<< HEAD
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+=======
+>>>>>>> 79d41529a5a71522eccdc10e27525a2bcf16d645
+                <label asp-for="ImageFileName" class="control-label"></label>
+                <input asp-for="ImageFileName" class="form-control" />
+                <span asp-validation-for="ImageFileName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+<<<<<<< HEAD
+=======
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+>>>>>>> 79d41529a5a71522eccdc10e27525a2bcf16d645
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
