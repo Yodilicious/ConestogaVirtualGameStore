@@ -17,5 +17,7 @@
 
         public IList<Review> Reviews { get; set; }
         public IList<ShoppingCartItem> ShoppingCartItems { get; set; }
+        public IList<Wishlist> Wishlist { get; set; }
+
     }
 }

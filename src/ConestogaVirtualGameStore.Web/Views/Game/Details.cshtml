@@ -62,7 +62,7 @@
     <div class="row">
         <div class="col-md-9">&nbsp;</div>
         <div class="col-md-3">
-            <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("Add", "Wishlist")'">Add To Wishlist</button>
+            <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("AddGameToWishList", "Game", new { @id = Model.RecordId })'">Add To Wishlist</button>
             <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("ConfirmShoppingCart", "Game", new {@id = Model.RecordId})'">Add To Cart</button>
         </div>
     </div>

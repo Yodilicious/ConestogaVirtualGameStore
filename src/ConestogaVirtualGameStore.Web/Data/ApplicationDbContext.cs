@@ -25,6 +25,7 @@
             builder.ApplyConfiguration(new EventConfiguration());
             builder.ApplyConfiguration(new ShoppingCartConfiguration());
             builder.ApplyConfiguration(new ShoppingCartItemConfiguration());
+            builder.ApplyConfiguration(new WishlistConfiguration());
         }
 
         public DbSet<Game> Games { get; set; }
@@ -32,5 +33,7 @@
         public DbSet<Event> Events { get; set; }
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
+        public DbSet<Wishlist> Wishlist { get; set; }
+
     }
 }

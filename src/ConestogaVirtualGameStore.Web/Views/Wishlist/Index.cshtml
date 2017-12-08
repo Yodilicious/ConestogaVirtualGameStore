@@ -1,0 +1,40 @@
+﻿@model List<ConestogaVirtualGameStore.Web.Models.Game>
+
+@{
+    ViewData["Title"] = "Wishlist";
+}
+
+<h2>Wishlist</h2>
+
+<table class="table">
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <img class="list-image" src="~/images/games/@item.ImageFileName" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    $@Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@item.RecordId">Remove</a>
+                </td>
+            </tr>
+        }
+        <tr>
+            <td></td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
