@@ -19,9 +19,16 @@
         }
 
         // GET: Friends
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string id)
         {
-            return View(await this._context.ApplicationUser.Where(u => u.UserName != User.Identity.Name).ToListAsync());
+            if (string.IsNullOrEmpty(id))
+            {
+                return View(await this._context.ApplicationUser.Where(u => u.UserName != User.Identity.Name).ToListAsync());
+            }
+            else
+            {
+                return View(await this._context.ApplicationUser.Where(u => u.UserName != User.Identity.Name && u.UserName.Contains(id)).ToListAsync());
+            }
         }
 
         // GET: Friends/Details/5

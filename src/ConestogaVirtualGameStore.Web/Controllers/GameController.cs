@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -181,7 +182,7 @@
         {
             this.gameRepository.AddGameToWishlist(id, User.Identity.Name);
             
-            return RedirectToAction("Details", "Game", new { @id = id });
+            return RedirectToAction("Index", "Wishlist", new { @id = string.Empty });
         }
 
         private bool GameExists(long id)

@@ -90,6 +90,7 @@
                 @if (!review.IsApproved)
                 {
                     <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("Approve", "Reviews", new {@id = review.RecordId})'">Approve</button>
+                    <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("Delete", "Reviews", new {@id = review.RecordId})'">Decline</button>
                 }
             </div>
         </div>

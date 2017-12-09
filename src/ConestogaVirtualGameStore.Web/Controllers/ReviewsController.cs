@@ -24,7 +24,7 @@
         // GET: Reviews
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = this._context.Reviews.Include(r => r.Game);
+            var applicationDbContext = this._context.Reviews.Include(r => r.Game).Where(r => !r.IsApproved);
             return View(await applicationDbContext.ToListAsync());
         }
 

@@ -48,6 +48,11 @@
                             <li><a asp-area="" asp-controller="GameReport" asp-action="Index">Game Report</a></li>
                             <li><a asp-area="" asp-controller="EventReport" asp-action="Index">Event Report</a></li>
                         }
+
+                        if (User.IsInRole("Moderator"))
+                        {
+                            <li><a asp-area="" asp-controller="Reviews" asp-action="Index">Review List</a></li>
+                        }
                     }
 
                 </ul>

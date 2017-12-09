@@ -6,6 +6,23 @@
 
 <h2>Friends/Family Member  List</h2>
 
+<div class="row">
+    <div class="col-md-4">
+        <form asp-controller="Friends" asp-action="Index">
+            <p>
+                User Name: <input type="text" name="id">
+                <input class="btn btn-primary" type="submit" value="Search" />
+                <button type="submit" class="btn btn-primary" onclick="location.href='@Url.Action("Index", "Friends")'">Reset</button>
+            </p>
+        </form>
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <h2>No Friends Found!</h2>
+}
+
 <table class="table">
     <thead>
         <tr>

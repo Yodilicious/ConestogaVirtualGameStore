@@ -1,14 +1,11 @@
 ﻿@model IEnumerable<ConestogaVirtualGameStore.Web.Models.Review>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Review List";
 }
 
-<h2>Index</h2>
+<h2>Review List</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -19,7 +16,7 @@
                     @Html.DisplayNameFor(model => model.Title)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.ReviewText)
+                    Review Text
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Rating)
@@ -27,9 +24,6 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Date)
                 </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Game)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -49,15 +43,11 @@
                 @Html.DisplayFor(modelItem => item.Rating)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Date)
+                @item.Date.ToShortDateString()
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Game.Description)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.RecordId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.RecordId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.RecordId">Delete</a>
+                <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("Approve", "Reviews", new {@id = item.RecordId})'">Approve</button>
+                <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("Delete", "Reviews", new {@id = item.RecordId})'">Decline</button>
             </td>
         </tr>
 }
