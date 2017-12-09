@@ -12,7 +12,7 @@
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.AspNetCore.Authorization;
 
-    [Authorize]
+    [Authorize(Roles = "Employee")]
     public class RolesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -28,6 +28,7 @@
             this.UserManager = userManager;
 
         }
+
         public async Task<IActionResult> Index()
         {
 
@@ -38,15 +39,17 @@
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> Create(IFormCollection collection)
 
         {
             try
             {
-                this._context.Roles.Add(new IdentityRole()
+                this._context.Roles.Add(new IdentityRole
                 {
-                    Name = collection["RoleName"]
+                    Name = collection["RoleName"],
+                    NormalizedName = collection["RoleName"].ToString().ToUpperInvariant()
                 });
                 await this._context.SaveChangesAsync();
                 return RedirectToAction("Index", "Roles");
@@ -56,13 +59,15 @@
                 return View();
             }
         }
+
         public ActionResult Delete(string roleName)
         {
-            var role = this._context.Roles.Where(r => r.Name.Equals(roleName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+            var role = this._context.Roles.FirstOrDefault(r => r.Name.Equals(roleName, StringComparison.CurrentCultureIgnoreCase));
             this._context.Roles.Remove(role);
             this._context.SaveChanges();
             return RedirectToAction("Index");
         }
+
         public ActionResult ManageUsers()
         {
             var roleList = this._context.Roles.OrderBy(b => b.Name).ToList()
@@ -72,6 +77,7 @@
             this.ViewBag.Roles = roleList;
             return View("ManageUsers");
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddRoleToUser(string UserName, string RoleName)
@@ -88,7 +94,6 @@
             //this.ViewBag.Roles = roleList;
 
             return RedirectToAction("Index");
-
         }
     }
 }

@@ -6,7 +6,7 @@
     using Data;
     using Microsoft.AspNetCore.Authorization;
 
-    [Authorize]
+    [Authorize(Roles = "Employee")]
     public class GameReportController : Controller
     {
         private readonly ApplicationDbContext _context;

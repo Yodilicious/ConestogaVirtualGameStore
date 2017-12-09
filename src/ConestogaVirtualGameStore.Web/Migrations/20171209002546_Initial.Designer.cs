@@ -11,8 +11,8 @@ using System;
 namespace ConestogaVirtualGameStore.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20171208155751_WishlistConfiguration")]
-    partial class WishlistConfiguration
+    [Migration("20171209002546_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -139,6 +139,8 @@ namespace ConestogaVirtualGameStore.Web.Migrations
 
                     b.Property<long>("GameId");
 
+                    b.Property<bool>("IsApproved");
+
                     b.Property<int>("Rating");
 
                     b.Property<string>("ReviewText")
@@ -201,19 +203,14 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                     b.Property<long>("RecordId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<long?>("GameRecordId");
+                    b.Property<long>("GameId");
 
-                    b.Property<string>("ImageFileName")
-                        .IsRequired();
-
-                    b.Property<decimal>("Price");
-
-                    b.Property<string>("Title")
+                    b.Property<string>("User")
                         .IsRequired();
 
                     b.HasKey("RecordId");
 
-                    b.HasIndex("GameRecordId");
+                    b.HasIndex("GameId");
 
                     b.ToTable("Wishlist");
                 });
@@ -349,9 +346,10 @@ namespace ConestogaVirtualGameStore.Web.Migrations
 
             modelBuilder.Entity("ConestogaVirtualGameStore.Web.Models.Wishlist", b =>
                 {
-                    b.HasOne("ConestogaVirtualGameStore.Web.Models.Game")
+                    b.HasOne("ConestogaVirtualGameStore.Web.Models.Game", "Game")
                         .WithMany("Wishlist")
-                        .HasForeignKey("GameRecordId");
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

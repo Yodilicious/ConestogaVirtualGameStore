@@ -202,21 +202,14 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                     b.Property<long>("RecordId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<long?>("GameRecordId");
+                    b.Property<long>("GameId");
 
-                    b.Property<string>("ImageFileName")
-                        .IsRequired();
-
-                    b.Property<string>("Price")
-                        .IsRequired();
-                    b.Property<decimal>("Price");
-
-                    b.Property<string>("Title")
+                    b.Property<string>("User")
                         .IsRequired();
 
                     b.HasKey("RecordId");
 
-                    b.HasIndex("GameRecordId");
+                    b.HasIndex("GameId");
 
                     b.ToTable("Wishlist");
                 });
@@ -352,9 +345,10 @@ namespace ConestogaVirtualGameStore.Web.Migrations
 
             modelBuilder.Entity("ConestogaVirtualGameStore.Web.Models.Wishlist", b =>
                 {
-                    b.HasOne("ConestogaVirtualGameStore.Web.Models.Game")
+                    b.HasOne("ConestogaVirtualGameStore.Web.Models.Game", "Game")
                         .WithMany("Wishlist")
-                        .HasForeignKey("GameRecordId");
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -176,21 +176,12 @@
 
             return View(game);
         }
+
         public IActionResult AddGameToWishList(long id)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return NotFound();
-            }
-
-            var game = this.gameRepository.AddGameToWishlist(id);
-
-            if (game == null)
-            {
-                return NotFound();
-            }
-
-            return View(game);
+            this.gameRepository.AddGameToWishlist(id, User.Identity.Name);
+            
+            return RedirectToAction("Details", "Game", new { @id = id });
         }
 
         private bool GameExists(long id)

@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ConestogaVirtualGameStore.Web.Models
+﻿namespace ConestogaVirtualGameStore.Web.Models
 {
     public class Wishlist : BaseModel
     {
-        public string Title { get; set; }
-        public decimal Price { get; set; }
-        public string ImageFileName { get; set; }
+        public string User { get; set; }
+        public long GameId { get; set; }
+        public Game Game { get; set; }
     }
 }

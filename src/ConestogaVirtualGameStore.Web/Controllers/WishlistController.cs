@@ -1,33 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using ConestogaVirtualGameStore.Web.Data;
-using ConestogaVirtualGameStore.Web.Models;
-
-namespace ConestogaVirtualGameStore.Web.Controllers
+﻿namespace ConestogaVirtualGameStore.Web.Controllers
 {
+    using Data;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Microsoft.EntityFrameworkCore;
+    using Models;
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    [Authorize]
     public class WishlistController : Controller
     {
         private readonly ApplicationDbContext _context;
 
         public WishlistController(ApplicationDbContext context)
         {
-            _context = context;
+            this._context = context;
         }
 
         // GET: Wishlist
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string id)
         {
-            if(!User.Identity.IsAuthenticated)
+            if (string.IsNullOrEmpty(id))
             {
-                return NotFound();
+                var applicationDbContext = this._context.Wishlist.Include(w => w.Game).Where(w => w.User == this.User.Identity.Name);
+                return View(await applicationDbContext.ToListAsync());
             }
-            var applicationDbcontext = _context.Games.Include(a => a.Wishlist);
-            return View(await applicationDbcontext.ToListAsync());
+            else
+            {
+                var applicationDbContext = this._context.Wishlist.Include(w => w.Game).Where(w => w.User == id);
+                return View(await applicationDbContext.ToListAsync());
+            }
         }
 
         // GET: Wishlist/Details/5
@@ -38,7 +42,8 @@ namespace ConestogaVirtualGameStore.Web.Controllers
                 return NotFound();
             }
 
-            var wishlist = await _context.Wishlist
+            var wishlist = await this._context.Wishlist
+                .Include(w => w.Game)
                 .SingleOrDefaultAsync(m => m.RecordId == id);
             if (wishlist == null)
             {
@@ -51,6 +56,7 @@ namespace ConestogaVirtualGameStore.Web.Controllers
         // GET: Wishlist/Create
         public IActionResult Create()
         {
+            this.ViewData["GameId"] = new SelectList(this._context.Games, "RecordId", "Description");
             return View();
         }
 
@@ -59,14 +65,15 @@ namespace ConestogaVirtualGameStore.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Price,ImageFileName,RecordId")] Wishlist wishlist)
+        public async Task<IActionResult> Create([Bind("User,GameId,RecordId")] Wishlist wishlist)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                _context.Add(wishlist);
-                await _context.SaveChangesAsync();
+                this._context.Add(wishlist);
+                await this._context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            this.ViewData["GameId"] = new SelectList(this._context.Games, "RecordId", "Description", wishlist.GameId);
             return View(wishlist);
         }
 
@@ -78,11 +85,12 @@ namespace ConestogaVirtualGameStore.Web.Controllers
                 return NotFound();
             }
 
-            var wishlist = await _context.Wishlist.SingleOrDefaultAsync(m => m.RecordId == id);
+            var wishlist = await this._context.Wishlist.SingleOrDefaultAsync(m => m.RecordId == id);
             if (wishlist == null)
             {
                 return NotFound();
             }
+            this.ViewData["GameId"] = new SelectList(this._context.Games, "RecordId", "Description", wishlist.GameId);
             return View(wishlist);
         }
 
@@ -91,19 +99,19 @@ namespace ConestogaVirtualGameStore.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Title,Price,ImageFileName,RecordId")] Wishlist wishlist)
+        public async Task<IActionResult> Edit(long id, [Bind("User,GameId,RecordId")] Wishlist wishlist)
         {
             if (id != wishlist.RecordId)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(wishlist);
-                    await _context.SaveChangesAsync();
+                    this._context.Update(wishlist);
+                    await this._context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -118,6 +126,7 @@ namespace ConestogaVirtualGameStore.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            this.ViewData["GameId"] = new SelectList(this._context.Games, "RecordId", "Description", wishlist.GameId);
             return View(wishlist);
         }
 
@@ -129,7 +138,8 @@ namespace ConestogaVirtualGameStore.Web.Controllers
                 return NotFound();
             }
 
-            var wishlist = await _context.Wishlist
+            var wishlist = await this._context.Wishlist
+                .Include(w => w.Game)
                 .SingleOrDefaultAsync(m => m.RecordId == id);
             if (wishlist == null)
             {
@@ -144,15 +154,15 @@ namespace ConestogaVirtualGameStore.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
-            var wishlist = await _context.Wishlist.SingleOrDefaultAsync(m => m.RecordId == id);
-            _context.Wishlist.Remove(wishlist);
-            await _context.SaveChangesAsync();
+            var wishlist = await this._context.Wishlist.SingleOrDefaultAsync(m => m.RecordId == id);
+            this._context.Wishlist.Remove(wishlist);
+            await this._context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool WishlistExists(long id)
         {
-            return _context.Wishlist.Any(e => e.RecordId == id);
+            return this._context.Wishlist.Any(e => e.RecordId == id);
         }
     }
 }

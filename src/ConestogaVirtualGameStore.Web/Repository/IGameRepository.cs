@@ -14,7 +14,7 @@
         void RemoveGame(Game game);
         bool Exists(long id);
         Game AddGameToShoppingCart(long id, string user);
-        Game AddGameToWishlist(long id);
+        void AddGameToWishlist(long id, string user);
 
         void AddReview(Review review);
     }

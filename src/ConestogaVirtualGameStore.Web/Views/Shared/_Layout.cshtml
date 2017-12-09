@@ -35,7 +35,9 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Game" asp-action="Index">Games</a></li>
                     <li><a asp-area="" asp-controller="Event" asp-action="Index">Events</a></li>
-                    
+                    <li><a asp-area="" asp-controller="Wishlist" asp-action="Index" asp-route-id="">Wishlist</a></li>
+                    <li><a asp-area="" asp-controller="ShoppingCart" asp-action="Index">My Cart</a></li>
+                    <li><a asp-area="" asp-controller="Friends" asp-action="Index">Friends</a></li>
                     
                     @if (User.Identity.IsAuthenticated)
                     {

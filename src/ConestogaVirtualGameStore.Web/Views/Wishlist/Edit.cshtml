@@ -13,31 +13,15 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+                <label asp-for="User" class="control-label"></label>
+                <input asp-for="User" class="form-control" />
+                <span asp-validation-for="User" class="text-danger"></span>
             </div>
             <div class="form-group">
-<<<<<<< HEAD
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
+                <label asp-for="GameId" class="control-label"></label>
+                <select asp-for="GameId" class="form-control" asp-items="ViewBag.GameId"></select>
+                <span asp-validation-for="GameId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-=======
->>>>>>> 79d41529a5a71522eccdc10e27525a2bcf16d645
-                <label asp-for="ImageFileName" class="control-label"></label>
-                <input asp-for="ImageFileName" class="form-control" />
-                <span asp-validation-for="ImageFileName" class="text-danger"></span>
-            </div>
-<<<<<<< HEAD
-=======
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
->>>>>>> 79d41529a5a71522eccdc10e27525a2bcf16d645
             <input type="hidden" asp-for="RecordId" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />
@@ -50,6 +34,3 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

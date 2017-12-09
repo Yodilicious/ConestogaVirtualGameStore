@@ -41,20 +41,15 @@
                 @item.Price.ToString("C")
             </td>
             <td>
-                @if (User.Identity.IsAuthenticated)
+                
+                @if (User.IsInRole("Employee"))
                 {
-                    if (User.IsInRole("Employee"))
-                    {
-                        <a asp-action="Edit" asp-route-id="@item.RecordId">Edit</a> <br />
-                        <a asp-action="Delete" asp-route-id="@item.RecordId">Delete</a><br />
-                    }
+                    <a asp-action="Edit" asp-route-id="@item.RecordId">Edit</a> @:|
+                    <a asp-action="Delete" asp-route-id="@item.RecordId">Delete</a> @:|
                 }
                 
                 <a asp-action="Details" asp-route-id="@item.RecordId">Details</a> |
-            @if (User.Identity.IsAuthenticated)
-            { 
                 <a asp-action="ConfirmShoppingCart" asp-route-id="@item.RecordId">Add To Cart</a> <br />
-            }
             </td>
         </tr>
 }
