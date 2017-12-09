@@ -21,7 +21,7 @@
         // GET: Friends
         public async Task<IActionResult> Index()
         {
-            return View(await this._context.ApplicationUser.ToListAsync());
+            return View(await this._context.ApplicationUser.Where(u => u.UserName != User.Identity.Name).ToListAsync());
         }
 
         // GET: Friends/Details/5

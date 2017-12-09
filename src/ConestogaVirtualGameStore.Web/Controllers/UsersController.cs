@@ -8,7 +8,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Models;
     
-    [Authorize(Roles = "Employee")]
+    [Authorize]
     public class UsersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -21,7 +21,7 @@
         // GET: Users
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ApplicationUser.ToListAsync());
+            return View(await _context.ApplicationUser.Where(u => u.UserName != User.Identity.Name).ToListAsync());
         }
 
         // GET: Users/Details/5

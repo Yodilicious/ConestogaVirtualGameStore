@@ -84,6 +84,8 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Author,Title,ReviewText,Rating,Date,GameId,RecordId")] Review review)
         {
+            this.ViewData["GameId"] = this.HttpContext.Session.GetInt32("game_id");
+
             if (this.ModelState.IsValid)
             {
                 review.IsApproved = false;
@@ -98,6 +100,11 @@
                 if (review.Rating > 5)
                 {
                     review.Rating = 5;
+                }
+
+                if (string.IsNullOrWhiteSpace(review.Title) || string.IsNullOrWhiteSpace(review.ReviewText))
+                {
+                    return View(review);
                 }
 
                 this._context.Add(review);
