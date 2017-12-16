@@ -1,53 +1,97 @@
-﻿@model IEnumerable<ConestogaVirtualGameStore.Web.Models.ShoppingCartItem>
+﻿@model ConestogaVirtualGameStore.Web.Models.ViewModels.ShoppingCartViewModel
 
 @{
     ViewData["Title"] = "Shopping Cart";
 }
 
-<h2>Shopping Cart</h2>
+<h2>Shipping To</h2>
 
-<table class="table">
-    <tbody>
-    @{decimal total = 0M;}
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                <img class="list-image" src="~/images/games/@item.Game.ImageFileName"/>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Game.Title)
-            </td>
-            <td>
-                $@Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.RecordId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.RecordId">Remove</a>
-            </td>
-        </tr>
-        total += item.Price;
-    }
-    <tr>
-        <td>
-        </td>
-        <td style="text-align: right;">
-            Total
-        </td>
-        <td>
-            $@total
-        </td>
-        <td>
-        </td>
-    </tr>
-    </tbody>
-</table>
-
-<div class="container">
-    <div class="row">
-        <div class="col-md-4"></div>
-        <div class="col-md-2"><button type="submit" class="btn btn-primary" onclick="location.href='@Url.Action("Index", "Game")'">Keep Shopping</button></div>
-        <div class="col-md-2"><button type="submit" class="btn btn-primary" onclick="location.href='@Url.Action("Checkout", "ShoppingCart")'">Check Out >></button></div>
-        <div class="col-md-4"></div>
-    </div>
+<div class="row">
+    <div class="col-md-2">Full Name:</div>
+    <div class="col-md-10">@Model.FirstName @Model.LastName</div>
 </div>
+
+<div class="row">
+    <div class="col-md-2">Address A:</div>
+    <div class="col-md-10">@Model.AddressA</div>
+</div>
+
+<div class="row">
+    <div class="col-md-2">Address B:</div>
+    <div class="col-md-10">@Model.AddressB</div>
+</div>
+
+<div class="row">
+    <div class="col-md-2">City:</div>
+    <div class="col-md-10">@Model.City</div>
+</div>
+<div class="row">
+    <div class="col-md-2">Province:</div>
+    <div class="col-md-10">@Model.Province</div>
+</div>
+
+<div class="row">
+    <div class="col-md-2">Postal Code:</div>
+    <div class="col-md-10">@Model.PostalCode</div>
+</div>
+
+<div class="row">
+    <div class="col-md-2">Credit Card Name:</div>
+    <div class="col-md-10">@Model.CreditCardName</div>
+</div>
+
+<div class="row">
+    <div class="col-md-2">Credit Card #:</div>
+    <div class="col-md-10">@Model.CreditCard</div>
+</div>
+
+<div class="row">
+    <div class="col-md-2">Expiry:</div>
+    <div class="col-md-10">@Model.CreditCardMonth @Model.CreditCardYear</div>
+</div>
+
+    <h2>Shopping Cart</h2>
+
+    <table class="table">
+        <tbody>
+            @{decimal total = 0M;}
+            @foreach (var item in Model.ShoppingCartItems)
+            {
+                <tr>
+                    <td>
+                        <img class="list-image" src="~/images/games/@item.Game.ImageFileName" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Game.Title)
+                    </td>
+                    <td>
+                        $@Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.RecordId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.RecordId">Remove</a>
+                    </td>
+                </tr>
+                total += item.Price;
+            }
+            <tr>
+                <td></td>
+                <td style="text-align: right;">
+                    Total
+                </td>
+                <td>
+                    $@total
+                </td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-2"><button type="submit" class="btn btn-primary" onclick="location.href='@Url.Action("Index", "Game")'">Keep Shopping</button></div>
+            <div class="col-md-2"><button type="submit" class="btn btn-primary" onclick="location.href='@Url.Action("Checkout", "ShoppingCart")'">Check Out >></button></div>
+            <div class="col-md-4"></div>
+        </div>
+    </div>

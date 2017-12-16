@@ -8,7 +8,9 @@
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.EntityFrameworkCore;
     using Data;
+    using Microsoft.AspNetCore.Identity;
     using Models;
+    using Models.ViewModels;
 
     [Authorize]
     public class ShoppingCartController : Controller
@@ -31,7 +33,26 @@
             var applicationDbContext = this._context.ShoppingCartItems.Include(s => s.Game).Include(s => s.ShoppingCart)
                 .Where(s => s.ShoppingCart.HasPaid == false && s.ShoppingCart.User == this.User.Identity.Name);
 
-            return View(await applicationDbContext.ToListAsync());
+            var user = this._context.ApplicationUser.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            var vm = new ShoppingCartViewModel();
+
+            vm.ShoppingCartItems = await applicationDbContext.ToListAsync();
+            vm.FirstName = user.FirstName;
+            vm.LastName = user.LastName;
+            vm.AddressA = user.AddressA;
+            vm.AddressB = user.AddressB;
+            vm.City = user.City;
+            vm.Province = user.Province;
+            vm.PostalCode = user.PostalCode;
+            vm.CreditCard = user.CreditCard;
+            vm.CreditCardName = user.NameOnCreditCard;
+            vm.CreditCardYear = user.ExpiryYear;
+            vm.CreditCardMonth = user.ExpiryMonth;
+            vm.Ccv = user.Ccv;
+            
+
+            return View(vm);
         }
 
         public async Task<IActionResult> Checkout()

@@ -15,6 +15,7 @@
         bool Exists(long id);
         Game AddGameToShoppingCart(long id, string user);
         void AddGameToWishlist(long id, string user);
+        List<Game> GetMyGames(string username);
 
         void AddReview(Review review);
     }

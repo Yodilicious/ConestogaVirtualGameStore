@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Models;
+    using Models.ViewModels;
     using Repository;
 
     [Authorize]
@@ -22,18 +23,58 @@
 
         public IActionResult Index(string id)
         {
+            List<GameViewModel> games = null;
             List<Game> data = null;
+            List<Game> myGames = null;
 
             if (!string.IsNullOrEmpty(id))
             {
+                games = new List<GameViewModel>();
                 data = this.gameRepository.GetGames(id);
+                myGames = this.gameRepository.GetMyGames(User.Identity.Name);
+
+                foreach (var game in data)
+                {
+                    var vm = new GameViewModel();
+
+                    vm.RecordId = game.RecordId;
+                    vm.Title = game.Title;
+                    vm.Description = game.Description;
+                    vm.Date = game.Date;
+                    vm.Developer = game.Developer;
+                    vm.ImageFileName = game.ImageFileName;
+                    vm.Price = game.Price;
+                    vm.Publisher = game.Publisher;
+                    vm.IsOwned = myGames.Exists(g => g.RecordId == game.RecordId);
+
+                    games.Add(vm);
+                }
             }
             else
             {
+                games = new List<GameViewModel>();
                 data = this.gameRepository.GetGames();
+                myGames = this.gameRepository.GetMyGames(User.Identity.Name);
+
+                foreach (var game in data)
+                {
+                    var vm = new GameViewModel();
+
+                    vm.RecordId = game.RecordId;
+                    vm.Title = game.Title;
+                    vm.Description = game.Description;
+                    vm.Date = game.Date;
+                    vm.Developer = game.Developer;
+                    vm.ImageFileName = game.ImageFileName;
+                    vm.Price = game.Price;
+                    vm.Publisher = game.Publisher;
+                    vm.IsOwned = myGames.Exists(g => g.RecordId == game.RecordId);
+
+                    games.Add(vm);
+                }
             }
 
-            return View(data);
+            return View(games);
         }
         
         public IActionResult Details(long? id)

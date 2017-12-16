@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ConestogaVirtualGameStore.Web.Models.Game>
+﻿@using ConestogaVirtualGameStore.Web.Models.ViewModels
+@model List<ConestogaVirtualGameStore.Web.Models.ViewModels.GameViewModel>
 
 @{
     ViewData["Title"] = "Games";
@@ -55,7 +56,16 @@
                 }
                 
                 <a asp-action="Details" asp-route-id="@item.RecordId">Details</a> |
-                <a asp-action="ConfirmShoppingCart" asp-route-id="@item.RecordId">Add To Cart</a> <br />
+                @if (item.IsOwned)
+                {
+                    <a asp-action="Index" asp-controller="GameLibrary" asp-route-id="@item.RecordId">In Library</a>
+                    <br />
+                }
+                else
+                {
+                    <a asp-action="ConfirmShoppingCart" asp-route-id="@item.RecordId">Add To Cart</a>
+                    <br/>
+                }
             </td>
         </tr>
 }
