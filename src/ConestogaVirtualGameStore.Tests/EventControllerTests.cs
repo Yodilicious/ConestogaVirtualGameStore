@@ -7,6 +7,7 @@
     using Web.Models;
     using Xunit;
     using System.Threading.Tasks;
+    using Web.Models.ViewModels;
 
     public class EventControllerTests : IClassFixture<DatabaseFixture>
     {
@@ -14,7 +15,7 @@
         public void Index_ReturnsAllEvents_AllEventsAreReturned()
         {
 
-            using (var controller = new EventController(this.fixture.context))
+            using (var controller = new EventController(this.fixture.context, null))
             {
                 var result = controller.Index() as ViewResult;
 
@@ -26,7 +27,7 @@
         [Fact]
         public void Details_ReturnOneEvent_OneEventIsReturned()
         {
-            using (var controller = new EventController(this.fixture.context))
+            using (var controller = new EventController(this.fixture.context, null))
             {
                 var result = controller.Details(1) as ViewResult;
 
@@ -42,7 +43,7 @@
         [Fact]
         public void Create_CreateAnEvent_OneEventIsCreated()
         {
-            using (var controller = new EventController(this.fixture.context))
+            using (var controller = new EventController(this.fixture.context, null))
             {
                 var createEvent = new Event
                 {
@@ -51,7 +52,14 @@
                     Date = DateTime.Now
                 };
 
-                var result = controller.Create(createEvent) as ViewResult;
+                var createEvent2 = new EventCreateViewModel
+                {
+                    Title = "Event6",
+                    Description = "Description 6",
+                    Date = DateTime.Now
+                };
+
+                var result = controller.Create(createEvent2) as ViewResult;
 
                 var resultEvent = this.fixture.context.Events.FirstOrDefault(g => g.Title == "Event6");
 
@@ -63,7 +71,7 @@
         [Fact]
         public void Edit_EditAnEvent_OneEventIsEdited()
         {
-            using (var controller = new EventController(this.fixture.context))
+            using (var controller = new EventController(this.fixture.context, null))
             {
                 var resultEvent = this.fixture.context.Events.FirstOrDefault(g => g.Title == "Event2");
 
@@ -80,7 +88,7 @@
         [Fact]
         public void DeleteConfirmed_DeleteAnEvent_OneEventIsDeleted()
         {
-            using (var controller = new EventController(this.fixture.context))
+            using (var controller = new EventController(this.fixture.context, null))
             {               
                 var result = controller.DeleteConfirmed(3) as ViewResult;
                 
