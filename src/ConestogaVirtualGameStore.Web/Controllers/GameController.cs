@@ -2,8 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Net.Http.Headers;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -15,10 +18,12 @@
     public class GameController : Controller
     {
         private readonly IGameRepository gameRepository;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public GameController(IGameRepository gameRepository)
+        public GameController(IGameRepository gameRepository, IHostingEnvironment hostingEnvironment)
         {
             this.gameRepository = gameRepository;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public IActionResult Index(string id)
@@ -96,21 +101,41 @@
 
         public IActionResult Create()
         {
+
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Title,Description,Price,Date,Developer,Publisher,RecordId")] Game game)
+        public IActionResult Create([Bind("Title,Description,Price,Date,Developer,Publisher,RecordId,File")] GameCreateViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                game.ImageFileName = string.Empty;
+                var game = new Game();
+
+                game.Title = vm.Title;
+                game.Description = vm.Description;
+                game.Price = vm.Price;
+                game.Date = vm.Date;
+                game.Developer = vm.Developer;
+                game.Publisher = vm.Publisher;
+                game.RecordId = vm.RecordId;
+
+                var file = vm.File;
+                var parsedContentDisposition =
+                    ContentDispositionHeaderValue.Parse(file.ContentDisposition);
+                var filename = Path.Combine(_hostingEnvironment.WebRootPath, "images", "games", parsedContentDisposition.FileName.Trim('"'));
+                using (var stream = System.IO.File.OpenWrite(filename))
+                {
+                    file.CopyTo(stream);
+                }
+
+                game.ImageFileName = parsedContentDisposition.FileName.Trim('"');
                 this.gameRepository.AddGame(game);
                 this.gameRepository.Save();
                 return RedirectToAction(nameof(Index));
             }
-            return View(game);
+            return View(vm);
         }
 
         public IActionResult CreateReview(long id)

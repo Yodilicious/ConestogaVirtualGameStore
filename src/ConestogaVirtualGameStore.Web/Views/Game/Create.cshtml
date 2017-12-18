@@ -1,4 +1,4 @@
-﻿@model ConestogaVirtualGameStore.Web.Models.Game
+﻿@model ConestogaVirtualGameStore.Web.Models.ViewModels.GameCreateViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
@@ -44,12 +44,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="File" class="control-label"></label>
-                @Html.TextBoxFor(m => m.File, new { type = "file" })
-            </div>
-            <div class="form-group">
-                <label asp-for="Publisher" class="control-label"></label>
-                <input asp-for="Publisher" class="form-control" />
-                <span asp-validation-for="Publisher" class="text-danger"></span>
+                <input asp-for="File" class="form-control" />
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />

@@ -11,6 +11,7 @@ namespace ConestogaVirtualGameStore.Tests
     using Moq;
     using Web.Data;
     using Web.Repository;
+    using ConestogaVirtualGameStore.Web.Models.ViewModels;
 
     public class GameControllerTests
     {
@@ -34,7 +35,7 @@ namespace ConestogaVirtualGameStore.Tests
                 }
             });
 
-            using (var controller = new GameController(mock.Object))
+            using (var controller = new GameController(mock.Object, null))
             {
                 var result = controller.Index("") as ViewResult;
 
@@ -60,7 +61,7 @@ namespace ConestogaVirtualGameStore.Tests
                     ImageFileName = ""
                 });
 
-            using (var controller = new GameController(mock.Object))
+            using (var controller = new GameController(mock.Object, null))
             {
                 var result = controller.Details(1) as ViewResult;
 
@@ -88,11 +89,22 @@ namespace ConestogaVirtualGameStore.Tests
                 Date = DateTime.Now
             };
 
+            var game1 = new GameCreateViewModel
+            {
+                Title = "Game6",
+                Description = "Description 6",
+                Price = 100,
+                Developer = "Developer 6",
+                Publisher = "Publisher 6",
+                ImageFileName = "",
+                Date = DateTime.Now
+            };
+
             mock.Setup(g => g.AddGame(game));
 
-            using (var controller = new GameController(mock.Object))
+            using (var controller = new GameController(mock.Object, null))
             {
-                var result = controller.Create(game) as ViewResult;
+                var result = controller.Create(game1) as ViewResult;
                 Assert.Null(result);
             }
         }
@@ -115,7 +127,7 @@ namespace ConestogaVirtualGameStore.Tests
 
             mock.Setup(g => g.UpdateGame(game));
 
-            using (var controller = new GameController(mock.Object))
+            using (var controller = new GameController(mock.Object, null))
             {
                 var result = controller.Edit(game.RecordId, game) as ViewResult;
 
@@ -141,7 +153,7 @@ namespace ConestogaVirtualGameStore.Tests
 
             mock.Setup(g => g.RemoveGame(game));
 
-            using (var controller = new GameController(mock.Object))
+            using (var controller = new GameController(mock.Object, null))
             {
                 var result = controller.DeleteConfirmed(3) as ViewResult;
 
