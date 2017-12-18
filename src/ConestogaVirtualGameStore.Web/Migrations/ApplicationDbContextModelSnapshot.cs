@@ -106,6 +106,9 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                     b.Property<string>("Description")
                         .IsRequired();
 
+                    b.Property<string>("ImagePath")
+                        .IsRequired();
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(128);

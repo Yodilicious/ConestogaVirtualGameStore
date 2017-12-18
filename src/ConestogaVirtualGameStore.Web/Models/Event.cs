@@ -5,13 +5,10 @@
 
     public class Event : BaseModel
     {
-
-        public Event()
-        { }
-
         public string Title { get; set; }
         public string Description { get; set; }
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
         public DateTime Date { get; set; }
+        public string ImagePath { get; set; }
     }
 }

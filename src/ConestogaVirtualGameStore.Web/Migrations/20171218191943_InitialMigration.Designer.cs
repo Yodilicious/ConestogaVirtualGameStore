@@ -11,7 +11,7 @@ using System;
 namespace ConestogaVirtualGameStore.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20171216213949_InitialMigration")]
+    [Migration("20171218191943_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -105,6 +105,9 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .IsRequired();
+
+                    b.Property<string>("ImagePath")
                         .IsRequired();
 
                     b.Property<string>("Title")

@@ -4,50 +4,37 @@
     ViewData["Title"] = "Events";
 }
 
-<h2>Event</h2>
+<h2>Events</h2>
 
 <p>
     <a asp-action="Create">Add New Event</a>
 </p>
 <table class="table">
-    <thead>
-        <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Title)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Date)
-                </th>
-            <th></th>
-        </tr>
-    </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.OrderByDescending(e => e.Date))
         {
             <tr>
+                <td class="image-column">
+                    <img class="list-image" src="~/images/events/@item.ImagePath" />
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Title)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Description)
+                    @item.Date.ToShortDateString()
+                </td>
+                <td style="width: 500px;">
+                    @item.Description
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Date)
-                </td>
-                <td>
-                    @if (User.Identity.IsAuthenticated)
-                {
-                    if (User.IsInRole("Employee"))
+                
+                    @if (User.IsInRole("Employee"))
                     {
-                            <a asp-action="Edit" asp-route-id="@item.RecordId">Edit</a> <br />
-                            <a asp-action="Delete" asp-route-id="@item.RecordId">Delete</a><br />
-                        }
+                        <a asp-action="Edit" asp-route-id="@item.RecordId">Edit</a> @:|
+                        <a asp-action="Delete" asp-route-id="@item.RecordId">Delete</a> @:|
                     }
-
-                    <a asp-action="Details" asp-route-id="@item.RecordId">Details</a> <br />
+                
+                    <a asp-action="Details" asp-route-id="@item.RecordId">Details</a>
                 </td>
             </tr>
         }

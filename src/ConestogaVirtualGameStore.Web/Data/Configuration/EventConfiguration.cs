@@ -21,6 +21,9 @@
             builder.Property(g => g.Description)
                 .IsRequired();
 
+            builder.Property(g => g.ImagePath)
+                .IsRequired();
+
             builder.Property(g => g.Date)
                 .HasColumnType("datetime2")
                 .IsRequired();
