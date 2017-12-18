@@ -1,5 +1,3 @@
-using System;
-
 namespace ConestogaVirtualGameStore.Web.Models
 {
     public class ErrorViewModel

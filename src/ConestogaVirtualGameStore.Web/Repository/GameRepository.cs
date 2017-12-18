@@ -14,6 +14,24 @@
             return this.context.Games.ToList();
         }
 
+        public List<Game> GetMyGames(string username)
+        {
+            var carts = this.context.ShoppingCarts.Include(sc => sc.ShoppingCartItems)
+                .Where(sc => sc.HasPaid && sc.User == username).ToList();
+
+            var games = new List<Game>();
+            foreach (var cart in carts)
+            {
+                foreach (var item in cart.ShoppingCartItems)
+                {
+                    var game = this.context.Games.FirstOrDefault(g => g.RecordId == item.GameId);
+                    games.Add(game);
+                }
+            }
+
+            return games;
+        }
+
         public List<Game> GetGames(string searchText)
         {
             return this.context.Games.Where(g => g.Title.Contains(searchText)).ToList();

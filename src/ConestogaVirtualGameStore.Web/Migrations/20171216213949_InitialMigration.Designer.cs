@@ -11,8 +11,8 @@ using System;
 namespace ConestogaVirtualGameStore.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20171209002546_Initial")]
-    partial class Initial
+    [Migration("20171216213949_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,17 +28,37 @@ namespace ConestogaVirtualGameStore.Web.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
+                    b.Property<string>("AddressA");
+
+                    b.Property<string>("AddressB");
+
+                    b.Property<string>("Ccv");
+
+                    b.Property<string>("City");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
+
+                    b.Property<string>("CreditCard");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
 
+                    b.Property<string>("ExpiryMonth");
+
+                    b.Property<string>("ExpiryYear");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("LastName");
+
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("NameOnCreditCard");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
@@ -51,6 +71,10 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("PostalCode");
+
+                    b.Property<string>("Province");
 
                     b.Property<string>("SecurityStamp");
 
