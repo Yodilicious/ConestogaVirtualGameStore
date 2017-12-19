@@ -175,5 +175,11 @@
         {
             return _context.Events.Any(e => e.RecordId == id);
         }
+        public IActionResult JoinEvent(long id)
+        {
+            var user = HttpContext.User.Identity.Name;
+
+            return null;
+        }
     }
 }
