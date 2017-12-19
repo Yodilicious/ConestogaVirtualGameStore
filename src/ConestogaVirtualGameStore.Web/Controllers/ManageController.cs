@@ -47,6 +47,7 @@ namespace ConestogaVirtualGameStore.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
+            await _userManager.UpdateAsync(user);
             if (user == null)
             {
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
@@ -60,7 +61,6 @@ namespace ConestogaVirtualGameStore.Web.Controllers
                 IsEmailConfirmed = user.EmailConfirmed,
                 StatusMessage = StatusMessage
             };
-
             return View(model);
         }
 
@@ -78,7 +78,15 @@ namespace ConestogaVirtualGameStore.Web.Controllers
             {
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-
+            var userName = user.UserName;
+            if(model.Username != userName)
+            {
+                var setUsernameResult = await _userManager.SetUserNameAsync(user, model.Username);
+                if (!setUsernameResult.Succeeded)
+                {
+                    throw new ApplicationException($"Unexpected error occurred setting email for user with ID '{user.Id}'.");
+                }
+            }
             var email = user.Email;
             if (model.Email != email)
             {
