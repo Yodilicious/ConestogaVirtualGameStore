@@ -11,7 +11,7 @@ using System;
 namespace ConestogaVirtualGameStore.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20171218191943_InitialMigration")]
+    [Migration("20171219003454_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -137,6 +137,8 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                     b.Property<string>("ImageFileName")
                         .IsRequired()
                         .HasMaxLength(256);
+
+                    b.Property<bool>("IsDownloadable");
 
                     b.Property<decimal>("Price");
 

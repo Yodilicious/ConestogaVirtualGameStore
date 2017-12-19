@@ -17,5 +17,6 @@ namespace ConestogaVirtualGameStore.Web.Models.ViewModels
         public string Publisher { get; set; }
         public string ImageFileName { get; set; }
         public IFormFile File { get; set; }
+        public bool IsDownloadable { get; set; }
     }
 }

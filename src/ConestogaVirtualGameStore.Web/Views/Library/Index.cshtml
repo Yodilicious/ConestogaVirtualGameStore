@@ -12,17 +12,14 @@
 <table class="table">
     <thead>
         <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Price)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.AddedOn)
-                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddedOn)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Game)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ShoppingCart)
+                Download
             </th>
             <th></th>
         </tr>
@@ -31,21 +28,16 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AddedOn)
+                @item.AddedOn.ToShortDateString()
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Game.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ShoppingCart.User)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.RecordId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.RecordId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.RecordId">Delete</a>
+                @if (item.Game.IsDownloadable)
+                {
+                    <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("Index", "Game")'">Download Game</button>
+                }
             </td>
         </tr>
 }

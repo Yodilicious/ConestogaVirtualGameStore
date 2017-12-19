@@ -14,6 +14,7 @@
         public string Developer { get; set; }
         public string Publisher { get; set; }
         public string ImageFileName { get; set; }
+        public bool IsDownloadable { get; set; }
 
         public IList<Review> Reviews { get; set; }
         public IList<ShoppingCartItem> ShoppingCartItems { get; set; }

@@ -36,6 +36,9 @@
                 .HasMaxLength(256)
                 .IsRequired();
 
+            builder.Property(g => g.IsDownloadable)
+                .IsRequired();
+
             builder.Property(g => g.Date)
                 .HasColumnType("datetime2")
                 .IsRequired();

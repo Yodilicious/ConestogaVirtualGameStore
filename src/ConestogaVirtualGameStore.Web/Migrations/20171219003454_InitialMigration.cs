@@ -86,6 +86,7 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Developer = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     ImageFileName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    IsDownloadable = table.Column<bool>(type: "bit", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18, 2)", nullable: false),
                     Publisher = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     Title = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false)
