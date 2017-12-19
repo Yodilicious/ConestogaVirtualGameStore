@@ -107,7 +107,7 @@
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Title,Description,Price,Date,Developer,Publisher,RecordId,File")] GameCreateViewModel vm)
+        public IActionResult Create([Bind("Title,Description,Price,Date,Developer,Publisher,RecordId,File,IsDownloadable")] GameCreateViewModel vm)
         {
             if (ModelState.IsValid)
             {
@@ -120,6 +120,7 @@
                 game.Developer = vm.Developer;
                 game.Publisher = vm.Publisher;
                 game.RecordId = vm.RecordId;
+                game.IsDownloadable = vm.IsDownloadable;
 
                 var file = vm.File;
                 var parsedContentDisposition =
@@ -166,7 +167,7 @@
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(long id, [Bind("Title,Description,Price,Date,Developer,Publisher,RecordId")] Game game)
+        public IActionResult Edit(long id, [Bind("Title,Description,Price,Date,Developer,Publisher,RecordId,IsDownloadable")] Game game)
         {
             if (id != game.RecordId)
             {

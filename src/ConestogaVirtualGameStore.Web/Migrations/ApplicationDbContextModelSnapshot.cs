@@ -137,6 +137,8 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                         .IsRequired()
                         .HasMaxLength(256);
 
+                    b.Property<bool>("IsDownloadable");
+
                     b.Property<decimal>("Price");
 
                     b.Property<string>("Publisher")
