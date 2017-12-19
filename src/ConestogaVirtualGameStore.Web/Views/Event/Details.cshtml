@@ -6,31 +6,42 @@
 
 <h2>Details</h2>
 
-<div>
-    <h4>Event</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Date)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Date)
-        </dd>
-    </dl>
+<div class="row">
+    <div class="col-md-12">
+        <h1>@Model.Title</h1>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.RecordId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<div class="row">
+    <div class="col-md-4">
+        <img style="float:left" class="table-image" src="~/images/events/@Model.ImagePath" />
+    </div>
+    <div class="col-md-6">
+        <p>@Model.Description</p>
+    </div>
+    </div>
+
+<div class="row">&nbsp;</div>
+
+<div class="row">
+    <div class="col-md-1">Date: </div>
+    <div class="col-md-2">@Model.Date.ToShortDateString()</div>
+    <div class="col-md-9"></div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">&nbsp;</div>
+    <div class="col-md-4">
+        @if (User.Identity.IsAuthenticated)
+        {
+            if (User.IsInRole("Employee"))
+            {
+                <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("Edit", "Event", new {@id = Model.RecordId})'">Edit</button>
+            }
+        }
+        <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("JoinEvent", "Event", new { @id = Model.RecordId })'">Join Event</button>
+        <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("Index", "Event", new {@id = Model.RecordId})'">Back to List</button>
+
+        </div>
+    </div>
 </div>
