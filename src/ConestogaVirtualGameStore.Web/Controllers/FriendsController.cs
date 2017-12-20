@@ -1,5 +1,6 @@
 ﻿namespace ConestogaVirtualGameStore.Web.Controllers
 {
+    using System.Collections.Generic;
     using Data;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@
     using Models;
     using System.Linq;
     using System.Threading.Tasks;
+    using Models.ViewModels;
 
     [Authorize]
     public class FriendsController : Controller
@@ -21,14 +23,64 @@
         // GET: Friends
         public async Task<IActionResult> Index(string id)
         {
-            if (string.IsNullOrEmpty(id))
+            var me = await this._context.ApplicationUser.FirstOrDefaultAsync(u => u.UserName == this.User.Identity.Name);
+            var users = await this._context.ApplicationUser.Where(u => u.UserName != this.User.Identity.Name).ToListAsync();
+            var friends = await this._context.Friends.Where(f => f.UserId == me.Id).ToListAsync();
+
+            var vms = new List<FriendViewModel>();
+            foreach (var user in users)
             {
-                return View(await this._context.ApplicationUser.Where(u => u.UserName != User.Identity.Name).ToListAsync());
+                if (friends.Exists(u => u.FriendId == user.Id))
+                {
+                    var vm = new FriendViewModel();
+
+                    vm.Id = user.Id;
+                    vm.Email = user.Email;
+                    vm.IsFriend = true;
+
+                    vms.Add(vm);
+                }
             }
-            else
+
+            return View(vms);
+        }
+
+        public IActionResult Remove(string id)
+        {
+            if (id == null)
             {
-                return View(await this._context.ApplicationUser.Where(u => u.UserName != User.Identity.Name && u.UserName.Contains(id)).ToListAsync());
+                return NotFound();
             }
+
+            var me = this._context.ApplicationUser.FirstOrDefault(f => f.UserName == this.User.Identity.Name);
+
+            if (me != null)
+            {
+                var friend = this._context.Friends.FirstOrDefault(f => f.FriendId == id && f.UserId == me.Id);
+
+                this._context.Friends.Remove(friend);
+                this._context.SaveChanges();
+            }
+
+            var users = this._context.ApplicationUser.Where(u => u.UserName != this.User.Identity.Name).ToList();
+            var friends = this._context.Friends.Where(f => f.UserId == me.Id).ToList();
+
+            var vms = new List<FriendViewModel>();
+            foreach (var user in users)
+            {
+                if (friends.Exists(u => u.FriendId == user.Id))
+                {
+                    var vm = new FriendViewModel();
+
+                    vm.Id = user.Id;
+                    vm.Email = user.Email;
+                    vm.IsFriend = true;
+
+                    vms.Add(vm);
+                }
+            }
+
+            return View("Index", vms);
         }
 
         // GET: Friends/Details/5

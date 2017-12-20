@@ -14,6 +14,8 @@ using ConestogaVirtualGameStore.Web.Services;
 
 namespace ConestogaVirtualGameStore.Web.Controllers
 {
+    using Data;
+
     [Authorize]
     [Route("[controller]/[action]")]
     public class ManageController : Controller
@@ -23,6 +25,7 @@ namespace ConestogaVirtualGameStore.Web.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
         private readonly UrlEncoder _urlEncoder;
+        private readonly ApplicationDbContext _context;
 
         private const string AuthenicatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 
@@ -31,13 +34,15 @@ namespace ConestogaVirtualGameStore.Web.Controllers
           SignInManager<ApplicationUser> signInManager,
           IEmailSender emailSender,
           ILogger<ManageController> logger,
-          UrlEncoder urlEncoder)
+          UrlEncoder urlEncoder,
+          ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
             _urlEncoder = urlEncoder;
+            this._context = context;
         }
 
         [TempData]
@@ -59,8 +64,21 @@ namespace ConestogaVirtualGameStore.Web.Controllers
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 IsEmailConfirmed = user.EmailConfirmed,
-                StatusMessage = StatusMessage
+                StatusMessage = StatusMessage,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                AddressA = user.AddressA,
+                AddressB = user.AddressB,
+                City = user.City,
+                Province = user.Province,
+                PostalCode = user.PostalCode,
+                NameOnCreditCard = user.NameOnCreditCard,
+                CreditCard = user.CreditCard,
+                ExpiryMonth = user.ExpiryMonth,
+                ExpiryYear = user.ExpiryYear,
+                Ccv = user.Ccv
             };
+
             return View(model);
         }
 
@@ -106,6 +124,23 @@ namespace ConestogaVirtualGameStore.Web.Controllers
                     throw new ApplicationException($"Unexpected error occurred setting phone number for user with ID '{user.Id}'.");
                 }
             }
+
+            var user1 = this._context.ApplicationUser.FirstOrDefault(u => u.UserName == model.Username);
+
+            user1.FirstName = model.FirstName;
+            user1.LastName = model.LastName;
+            user1.AddressA = model.AddressA;
+            user1.AddressB = model.AddressB;
+            user1.City = model.City;
+            user1.Province = model.Province;
+            user1.PostalCode = model.PostalCode;
+            user1.NameOnCreditCard = model.NameOnCreditCard;
+            user1.CreditCard = model.CreditCard;
+            user1.ExpiryMonth = model.ExpiryMonth;
+            user1.ExpiryYear = model.ExpiryYear;
+            user1.Ccv = model.Ccv;
+
+            _context.SaveChanges();
 
             StatusMessage = "Your profile has been updated";
             return RedirectToAction(nameof(Index));

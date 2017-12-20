@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ConestogaVirtualGameStore.Web.Models.Event>
+﻿@model IEnumerable<ConestogaVirtualGameStore.Web.Models.ViewModels.EventViewModel>
 
 @{
     ViewData["Title"] = "Events";
@@ -27,14 +27,31 @@
                     @item.Description
                 </td>
                 <td>
+                    @if (item.IsRegistered)
+                    {
+                        <span class="label label-primary">Registered</span>
+                    }
+                </td>
+                <td>
                 
                     @if (User.IsInRole("Employee"))
                     {
                         <a asp-action="Edit" asp-route-id="@item.RecordId">Edit</a> @:|
-                        <a asp-action="Delete" asp-route-id="@item.RecordId">Delete</a> @:|
+                                            if (!item.IsRegistered)
+                        {
+                            <a asp-action="Delete" asp-route-id="@item.RecordId">Delete</a> @:|   
+                        }
                     }
                 
-                    <a asp-action="Details" asp-route-id="@item.RecordId">Details</a>
+                    <a asp-action="Details" asp-route-id="@item.RecordId">Details</a> |
+                    @if (item.IsRegistered)
+                    {
+                        <a asp-action="Unregister" asp-route-id="@item.RecordId">Unregister</a>
+                    }
+                    else
+                    {
+                        <a asp-action="Register" asp-route-id="@item.RecordId">Register</a>
+                    }
                 </td>
             </tr>
         }

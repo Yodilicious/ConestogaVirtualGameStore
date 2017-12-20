@@ -28,6 +28,8 @@ namespace ConestogaVirtualGameStore.Web.Data
             builder.ApplyConfiguration(new ShoppingCartConfiguration());
             builder.ApplyConfiguration(new ShoppingCartItemConfiguration());
             builder.ApplyConfiguration(new WishlistConfiguration());
+            builder.ApplyConfiguration(new EventRegistrationConfiguration());
+            builder.ApplyConfiguration(new FriendConfiguration());
         }
 
         public DbSet<Game> Games { get; set; }
@@ -37,5 +39,7 @@ namespace ConestogaVirtualGameStore.Web.Data
         public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
         public DbSet<Wishlist> Wishlist { get; set; }
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
+        public DbSet<Friend> Friends { get; set; }
+        public DbSet<EventRegistration> EventRegistrations { get; set; }
     }
 }

@@ -11,7 +11,7 @@ using System;
 namespace ConestogaVirtualGameStore.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20171219003454_InitialMigration")]
+    [Migration("20171219171417_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -117,6 +117,37 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                     b.HasKey("RecordId");
 
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("ConestogaVirtualGameStore.Web.Models.EventRegistration", b =>
+                {
+                    b.Property<long>("RecordId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<long>("EventId");
+
+                    b.Property<DateTime>("RegisteredOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("RecordId");
+
+                    b.ToTable("EventRegistrations");
+                });
+
+            modelBuilder.Entity("ConestogaVirtualGameStore.Web.Models.Friend", b =>
+                {
+                    b.Property<long>("RecordId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("FriendId");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("RecordId");
+
+                    b.ToTable("Friends");
                 });
 
             modelBuilder.Entity("ConestogaVirtualGameStore.Web.Models.Game", b =>

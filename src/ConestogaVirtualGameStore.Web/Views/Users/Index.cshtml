@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ConestogaVirtualGameStore.Web.Models.ApplicationUser>
+﻿@model IEnumerable<ConestogaVirtualGameStore.Web.Models.ViewModels.FriendViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -20,10 +20,18 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.UserName)
+                @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                @if (item.IsFriend)
+                {
+                    <a style="color: #ff4500;" asp-action="RemoveFriend" asp-route-id="@item.Id">Remove from Friends/Family List</a>
+                }
+                else
+                {
+                    <a asp-action="AddFriend" asp-route-id="@item.Id">Add To Friends/Family List</a>
+                }
             </td>
         </tr>
 }

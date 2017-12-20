@@ -91,7 +91,18 @@
         <div class="row">
             <div class="col-md-4"></div>
             <div class="col-md-2"><button type="submit" class="btn btn-primary" onclick="location.href='@Url.Action("Index", "Game")'">Keep Shopping</button></div>
-            <div class="col-md-2"><button type="submit" class="btn btn-primary" onclick="location.href='@Url.Action("Checkout", "ShoppingCart")'">Check Out >></button></div>
+            @if (string.IsNullOrEmpty(Model.FirstName))
+            {
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("Index", "Manage")'">Update Profile</button>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("Checkout", "ShoppingCart")'">Check Out >></button>
+                </div>
+            }
             <div class="col-md-4"></div>
         </div>
     </div>

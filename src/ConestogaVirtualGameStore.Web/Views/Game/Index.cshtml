@@ -58,7 +58,7 @@
                 <a asp-action="Details" asp-route-id="@item.RecordId">Details</a> |
                 @if (item.IsOwned)
                 {
-                    <a asp-action="Index" asp-controller="GameLibrary" asp-route-id="@item.RecordId">In Library</a>
+                    <a asp-action="Index" asp-controller="Library">In Library</a>
                     <br />
                 }
                 else

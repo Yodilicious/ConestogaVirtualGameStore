@@ -1,0 +1,27 @@
+﻿@model List<ConestogaVirtualGameStore.Web.Models.ViewModels.SalesReportViewModel>
+@{
+    ViewData["Title"] = "Sales Report";
+}
+
+<h2>Sales Report</h2>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Game Name</th>
+            <th>Number of Downloads</th>
+            <th>Sales Price</th>
+            <th>Year</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.GameName</td>
+                <td>@item.NumberOfDownloads</td>
+                <td>@item.SalesPrice.ToString("C")</td>
+                <td>@item.Year</td>
+            </tr>
+        }
+    </tbody>
+</table>

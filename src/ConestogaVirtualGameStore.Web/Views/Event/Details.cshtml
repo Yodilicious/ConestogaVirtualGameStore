@@ -39,9 +39,8 @@
                 <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("Edit", "Event", new {@id = Model.RecordId})'">Edit</button>
             }
         }
-        <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("JoinEvent", "Event", new { @id = Model.RecordId })'">Join Event</button>
+        <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("Register", "Event", new { @id = Model.RecordId })'">Join Event</button>
         <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("Index", "Event", new {@id = Model.RecordId})'">Back to List</button>
 
-        </div>
     </div>
 </div>

@@ -30,7 +30,91 @@
         // GET: Event
         public IActionResult Index()
         {
-            return View(_context.Events.ToList());
+            var me = this._context.ApplicationUser.FirstOrDefault(u => u.UserName == this.User.Identity.Name);
+            var events = this._context.Events.ToList();
+            var myEvents = this._context.EventRegistrations.Where(evt => evt.UserId == me.Id).ToList();
+
+            var vms = new List<EventViewModel>();
+            foreach (var evt in events)
+            {
+                var vm = new EventViewModel();
+
+                vm.RecordId = evt.RecordId;
+                vm.Date = evt.Date;
+                vm.Description = evt.Description;
+                vm.ImagePath = evt.ImagePath;
+                vm.Title = evt.Title;
+                vm.IsRegistered = myEvents.Exists(m => m.EventId == evt.RecordId);
+
+                vms.Add(vm);
+            }
+            
+            return View(vms);
+        }
+
+        public IActionResult Register(long id)
+        {
+            var me = this._context.ApplicationUser.FirstOrDefault(u => u.UserName == this.User.Identity.Name);
+
+            var registration = new EventRegistration();
+
+            registration.EventId = id;
+            registration.UserId = me.Id;
+            registration.RegisteredOn = DateTime.Now;
+
+            this._context.EventRegistrations.Add(registration);
+            this._context.SaveChanges();
+            
+            var events = this._context.Events.ToList();
+            var myEvents = this._context.EventRegistrations.Where(evt => evt.UserId == me.Id).ToList();
+
+            var vms = new List<EventViewModel>();
+            foreach (var evt in events)
+            {
+                var vm = new EventViewModel();
+
+                vm.RecordId = evt.RecordId;
+                vm.Date = evt.Date;
+                vm.Description = evt.Description;
+                vm.ImagePath = evt.ImagePath;
+                vm.Title = evt.Title;
+                vm.IsRegistered = myEvents.Exists(m => m.EventId == evt.RecordId);
+
+                vms.Add(vm);
+            }
+
+            return View("Index", vms);
+        }
+
+        public IActionResult Unregister(long id)
+        {
+            var me = this._context.ApplicationUser.FirstOrDefault(u => u.UserName == this.User.Identity.Name);
+
+            var registration =
+                this._context.EventRegistrations.FirstOrDefault(er => er.EventId == id && er.UserId == me.Id);
+            
+            this._context.EventRegistrations.Remove(registration);
+            this._context.SaveChanges();
+
+            var events = this._context.Events.ToList();
+            var myEvents = this._context.EventRegistrations.Where(evt => evt.UserId == me.Id).ToList();
+
+            var vms = new List<EventViewModel>();
+            foreach (var evt in events)
+            {
+                var vm = new EventViewModel();
+
+                vm.RecordId = evt.RecordId;
+                vm.Date = evt.Date;
+                vm.Description = evt.Description;
+                vm.ImagePath = evt.ImagePath;
+                vm.Title = evt.Title;
+                vm.IsRegistered = myEvents.Exists(m => m.EventId == evt.RecordId);
+
+                vms.Add(vm);
+            }
+
+            return View("Index", vms);
         }
 
         // GET: Event/Details/5
@@ -123,7 +207,12 @@
             {
                 try
                 {
-                    _context.Update(@event);
+                    var evt = this._context.Events.FirstOrDefault(e => e.RecordId == @event.RecordId);
+
+                    evt.Date = @event.Date;
+                    evt.Description = @event.Description;
+                    evt.Title = @event.Title;
+                    
                     _context.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)

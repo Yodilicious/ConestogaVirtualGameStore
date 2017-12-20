@@ -61,6 +61,21 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "EventRegistrations",
+                columns: table => new
+                {
+                    RecordId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    EventId = table.Column<long>(type: "bigint", nullable: false),
+                    RegisteredOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EventRegistrations", x => x.RecordId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Events",
                 columns: table => new
                 {
@@ -74,6 +89,20 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Events", x => x.RecordId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Friends",
+                columns: table => new
+                {
+                    RecordId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    FriendId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Friends", x => x.RecordId);
                 });
 
             migrationBuilder.CreateTable(
@@ -368,7 +397,13 @@ namespace ConestogaVirtualGameStore.Web.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "EventRegistrations");
+
+            migrationBuilder.DropTable(
                 name: "Events");
+
+            migrationBuilder.DropTable(
+                name: "Friends");
 
             migrationBuilder.DropTable(
                 name: "Reviews");

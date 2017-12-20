@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ConestogaVirtualGameStore.Web.Models.ApplicationUser>
+﻿@model IEnumerable<ConestogaVirtualGameStore.Web.Models.ViewModels.FriendViewModel>
 
 @{
     ViewData["Title"] = "Friends/Family Member List";
@@ -36,10 +36,11 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.UserName)
+                @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                <a asp-controller="Wishlist" asp-action="Index" asp-route-id="@item.UserName">Wishlist</a>
+                <a asp-controller="Wishlist" asp-action="Index" asp-route-id="@item.Email">Wishlist</a> |
+                <a asp-action="Remove" asp-route-id="@item.Id">Remove</a>
             </td>
         </tr>
 }
