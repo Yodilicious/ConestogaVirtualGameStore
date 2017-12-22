@@ -505,6 +505,27 @@ namespace ConestogaVirtualGameStore.Web.Controllers
             return View(model);
         }
 
+        public IActionResult DeleteConfirm()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> DeleteAccount()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            
+            if (user != null)
+            {
+                user.LockoutEnabled = true;
+                user.LockoutEnd = DateTime.UtcNow.AddYears(100);
+                await this._userManager.UpdateAsync(user);
+
+                await _signInManager.SignOutAsync();
+            }
+
+            return RedirectToAction("DeleteConfirm", "Manage");
+        }
+
         #region Helpers
 
         private void AddErrors(IdentityResult result)
