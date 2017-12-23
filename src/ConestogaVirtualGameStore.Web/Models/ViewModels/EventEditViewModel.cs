@@ -4,7 +4,7 @@
     using System.ComponentModel.DataAnnotations;
     using Microsoft.AspNetCore.Http;
 
-    public class EventCreateViewModel
+    public class EventEditViewModel
     {
         public long RecordId { get; set; }
 
@@ -18,8 +18,6 @@
         public DateTime Date { get; set; }
 
         public string ImagePath { get; set; }
-
-        [Required]
         public IFormFile File { get; set; }
     }
 }

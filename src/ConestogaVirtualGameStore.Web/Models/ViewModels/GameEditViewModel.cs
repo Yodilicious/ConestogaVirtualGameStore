@@ -4,7 +4,7 @@
     using System.ComponentModel.DataAnnotations;
     using Microsoft.AspNetCore.Http;
 
-    public class EventCreateViewModel
+    public class GameEditViewModel
     {
         public long RecordId { get; set; }
 
@@ -15,11 +15,21 @@
         public string Description { get; set; }
 
         [Required]
-        public DateTime Date { get; set; }
-
-        public string ImagePath { get; set; }
+        public decimal Price { get; set; }
 
         [Required]
+        public DateTime Date { get; set; }
+
+        [Required]
+        public string Developer { get; set; }
+
+        [Required]
+        public string Publisher { get; set; }
+
+        public string ImageFileName { get; set; }
+
         public IFormFile File { get; set; }
+
+        public bool IsDownloadable { get; set; }
     }
 }

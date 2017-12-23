@@ -157,16 +157,20 @@
                 evt.Title = vm.Title;
                 evt.RecordId = vm.RecordId;
 
-                var file = vm.File;
-                var parsedContentDisposition =
-                    ContentDispositionHeaderValue.Parse(file.ContentDisposition);
-                var filename = Path.Combine(_hostingEnvironment.WebRootPath, "images", "events", parsedContentDisposition.FileName.Trim('"'));
-                using (var stream = System.IO.File.OpenWrite(filename))
+                if (vm.File != null)
                 {
-                    file.CopyTo(stream);
-                }
+                    var file = vm.File;
+                    var parsedContentDisposition =
+                        ContentDispositionHeaderValue.Parse(file.ContentDisposition);
+                    var filename = Path.Combine(_hostingEnvironment.WebRootPath, "images", "events",
+                        parsedContentDisposition.FileName.Trim('"'));
+                    using (var stream = System.IO.File.OpenWrite(filename))
+                    {
+                        file.CopyTo(stream);
+                    }
 
-                evt.ImagePath = parsedContentDisposition.FileName.Trim('"');
+                    evt.ImagePath = parsedContentDisposition.FileName.Trim('"');
+                }
 
                 _context.Add(evt);
                 _context.SaveChanges();
@@ -184,11 +188,21 @@
             }
 
             var @event = _context.Events.SingleOrDefault(m => m.RecordId == id);
+
             if (@event == null)
             {
                 return NotFound();
             }
-            return View(@event);
+
+            var vm = new EventEditViewModel();
+
+            vm.RecordId = @event.RecordId;
+            vm.Date = @event.Date;
+            vm.Description = @event.Description;
+            vm.ImagePath = @event.ImagePath;
+            vm.Title = @event.Title;
+
+            return View(vm);
         }
 
         // POST: Event/Edit/5
@@ -196,9 +210,9 @@
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(long id, [Bind("Title,Description,Date,RecordId")] Event @event)
+        public IActionResult Edit(long id, [Bind("Title,Description,Date,RecordId,ImagePath,File")] EventEditViewModel vm)
         {
-            if (id != @event.RecordId)
+            if (id != vm.RecordId)
             {
                 return NotFound();
             }
@@ -207,17 +221,32 @@
             {
                 try
                 {
-                    var evt = this._context.Events.FirstOrDefault(e => e.RecordId == @event.RecordId);
+                    var evt = this._context.Events.FirstOrDefault(e => e.RecordId == vm.RecordId);
 
-                    evt.Date = @event.Date;
-                    evt.Description = @event.Description;
-                    evt.Title = @event.Title;
-                    
+                    evt.Date = vm.Date;
+                    evt.Description = vm.Description;
+                    evt.Title = vm.Title;
+
+                    if (vm.File != null)
+                    {
+                        var file = vm.File;
+                        var parsedContentDisposition =
+                            ContentDispositionHeaderValue.Parse(file.ContentDisposition);
+                        var filename = Path.Combine(_hostingEnvironment.WebRootPath, "images", "events",
+                            parsedContentDisposition.FileName.Trim('"'));
+                        using (var stream = System.IO.File.OpenWrite(filename))
+                        {
+                            file.CopyTo(stream);
+                        }
+
+                        evt.ImagePath = parsedContentDisposition.FileName.Trim('"');
+                    }
+
                     _context.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EventExists(@event.RecordId))
+                    if (!EventExists(vm.RecordId))
                     {
                         return NotFound();
                     }
@@ -228,7 +257,7 @@
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(@event);
+            return View(vm);
         }
 
         // GET: Event/Delete/5

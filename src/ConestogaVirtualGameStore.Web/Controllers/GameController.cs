@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Net.Http.Headers;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Hosting;
@@ -122,16 +121,21 @@
                 game.RecordId = vm.RecordId;
                 game.IsDownloadable = vm.IsDownloadable;
 
-                var file = vm.File;
-                var parsedContentDisposition =
-                    ContentDispositionHeaderValue.Parse(file.ContentDisposition);
-                var filename = Path.Combine(_hostingEnvironment.WebRootPath, "images", "games", parsedContentDisposition.FileName.Trim('"'));
-                using (var stream = System.IO.File.OpenWrite(filename))
+                if (vm.File != null)
                 {
-                    file.CopyTo(stream);
+                    var file = vm.File;
+                    var parsedContentDisposition =
+                        ContentDispositionHeaderValue.Parse(file.ContentDisposition);
+                    var filename = Path.Combine(_hostingEnvironment.WebRootPath, "images", "games",
+                        parsedContentDisposition.FileName.Trim('"'));
+                    using (var stream = System.IO.File.OpenWrite(filename))
+                    {
+                        file.CopyTo(stream);
+                    }
+
+                    game.ImageFileName = parsedContentDisposition.FileName.Trim('"');
                 }
 
-                game.ImageFileName = parsedContentDisposition.FileName.Trim('"');
                 this.gameRepository.AddGame(game);
                 this.gameRepository.Save();
                 return RedirectToAction(nameof(Index));
@@ -155,11 +159,25 @@
             }
 
             var game = this.gameRepository.GetGame(id.Value);
+
             if (game == null)
             {
                 return NotFound();
             }
-            return View(game);
+
+            var vm = new GameEditViewModel();
+
+            vm.RecordId = game.RecordId;
+            vm.Date = game.Date;
+            vm.Description = game.Description;
+            vm.Developer = game.Developer;
+            vm.ImageFileName = game.ImageFileName;
+            vm.IsDownloadable = game.IsDownloadable;
+            vm.Price = game.Price;
+            vm.Publisher = game.Publisher;
+            vm.Title = game.Title;
+            
+            return View(vm);
         }
 
         // POST: Game/Edit/5
@@ -167,9 +185,9 @@
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(long id, [Bind("Title,Description,Price,Date,Developer,Publisher,RecordId,IsDownloadable")] Game game)
+        public IActionResult Edit(long id, [Bind("Title,Description,Price,Date,Developer,Publisher,RecordId,IsDownloadable,ImageFileName")] GameEditViewModel vm)
         {
-            if (id != game.RecordId)
+            if (id != vm.RecordId)
             {
                 return NotFound();
             }
@@ -178,13 +196,39 @@
             {
                 try
                 {
-                    game.ImageFileName = String.Empty;
+                    var game = new Game();
+
+                    game.Title = vm.Title;
+                    game.Description = vm.Description;
+                    game.Price = vm.Price;
+                    game.Date = vm.Date;
+                    game.Developer = vm.Developer;
+                    game.Publisher = vm.Publisher;
+                    game.RecordId = vm.RecordId;
+                    game.IsDownloadable = vm.IsDownloadable;
+                    game.ImageFileName = vm.ImageFileName;
+
+                    if (vm.File != null)
+                    {
+                        var file = vm.File;
+                        var parsedContentDisposition =
+                            ContentDispositionHeaderValue.Parse(file.ContentDisposition);
+                        var filename = Path.Combine(_hostingEnvironment.WebRootPath, "images", "games",
+                            parsedContentDisposition.FileName.Trim('"'));
+                        using (var stream = System.IO.File.OpenWrite(filename))
+                        {
+                            file.CopyTo(stream);
+                        }
+
+                        game.ImageFileName = parsedContentDisposition.FileName.Trim('"');
+                    }
+                    
                     this.gameRepository.UpdateGame(game);
                     this.gameRepository.Save();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!GameExists(game.RecordId))
+                    if (!GameExists(vm.RecordId))
                     {
                         return NotFound();
                     }
@@ -195,7 +239,7 @@
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(game);
+            return View(vm);
         }
 
         // GET: Game/Delete/5

@@ -46,7 +46,15 @@ namespace ConestogaVirtualGameStore.Web.Controllers
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-            ViewData["ReturnUrl"] = returnUrl;
+            if (returnUrl == "/Manage/DeleteConfirm")
+            {
+                ViewData["ReturnUrl"] = null;
+            }
+            else
+            {
+                ViewData["ReturnUrl"] = returnUrl;
+            }
+            
             return View();
         }
 

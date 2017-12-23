@@ -4,6 +4,8 @@ namespace ConestogaVirtualGameStore.Web.Models.ManageViewModels
 {
     public class IndexViewModel
     {
+        [Required]
+        [EmailAddress]
         public string Username { get; set; }
 
         public bool IsEmailConfirmed { get; set; }
