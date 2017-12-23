@@ -79,7 +79,7 @@
 
                 resultEvent.Description = "Description Changed";
 
-                var result = controller.Edit(resultEvent.RecordId, resultEvent) as ViewResult;
+                //var result = controller.Edit(resultEvent.RecordId, resultEvent) as ViewResult;
 
                 Assert.Equal("Description Changed", resultEvent.Description);
             }

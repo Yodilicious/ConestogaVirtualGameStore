@@ -91,7 +91,7 @@
         <div class="row">
             <div class="col-md-4"></div>
             <div class="col-md-2"><button type="submit" class="btn btn-primary" onclick="location.href='@Url.Action("Index", "Game")'">Keep Shopping</button></div>
-            @if (string.IsNullOrEmpty(Model.FirstName))
+            @if (string.IsNullOrEmpty(Model.FirstName) || string.IsNullOrEmpty(Model.LastName) || string.IsNullOrEmpty(Model.AddressA) || string.IsNullOrEmpty(Model.City) || string.IsNullOrEmpty(Model.Province) || string.IsNullOrEmpty(Model.PostalCode) || string.IsNullOrEmpty(Model.CreditCardName) || string.IsNullOrEmpty(Model.CreditCard) || string.IsNullOrEmpty(Model.CreditCardMonth) || string.IsNullOrEmpty(Model.CreditCardYear) || string.IsNullOrEmpty(Model.Ccv))
             {
                 <div class="col-md-2">
                     <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("Index", "Manage")'">Update Profile</button>
@@ -99,9 +99,13 @@
             }
             else
             {
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("Checkout", "ShoppingCart")'">Check Out >></button>
-                </div>
+                if (Model.ShoppingCartItems.Count > 0)
+                {
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary" onclick="location.href = '@Url.Action("Checkout", "ShoppingCart")'">Check Out >></button>
+                    </div>
+                }
+                
             }
             <div class="col-md-4"></div>
         </div>

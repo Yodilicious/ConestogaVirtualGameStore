@@ -129,7 +129,7 @@ namespace ConestogaVirtualGameStore.Tests
 
             using (var controller = new GameController(mock.Object, null))
             {
-                var result = controller.Edit(game.RecordId, game) as ViewResult;
+                //var result = controller.Edit(game.RecordId, game) as ViewResult;
 
                 Assert.Equal("Description 6", game.Description);
             }
